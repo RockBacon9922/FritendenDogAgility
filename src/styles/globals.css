@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* create a variable for the paddock image */
+
+/* background image paddock class */
+.paddock {
+  background-image: url("../../Images/paddock.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
