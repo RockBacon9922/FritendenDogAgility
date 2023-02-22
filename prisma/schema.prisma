@@ -75,16 +75,17 @@ model Dogs {
 }
 
 model eventEntry {
-    id        String   @id @default(cuid())
-    dog       Dogs     @relation(fields: [dogId], references: [id], onDelete: Cascade)
-    dogId     String
-    grade     Int      @default(0)
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId    String
-    verified  Boolean  @default(false)
-    points    Int      @default(0)
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id          String   @id @default(cuid())
+    dog         Dogs     @relation(fields: [dogId], references: [id], onDelete: Cascade)
+    dogId       String
+    grade       Int      @default(0)
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId      String
+    DateOfEvent DateTime
+    verified    Boolean  @default(false)
+    points      Int      @default(0)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
 model VerificationToken {
