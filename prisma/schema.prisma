@@ -63,6 +63,7 @@ model User {
     email         String?      @unique
     emailVerified DateTime?
     image         String?
+    admin         Boolean      @default(false)
     accounts      Account[]
     sessions      Session[]
     Dogs          Dogs[]
@@ -72,9 +73,11 @@ model User {
 model Dogs {
     id         String       @id @default(cuid())
     name       String
+    showName   String
     breed      String
     age        Int
     grade      Int          @default(1)
+    height     Int          @default(4)
     user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId     String
     createdAt  DateTime     @default(now())
