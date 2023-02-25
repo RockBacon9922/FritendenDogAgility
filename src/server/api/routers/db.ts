@@ -18,32 +18,78 @@ export const dbRouter = createTRPCRouter({
         content: true,
         createdAt: true,
       },
-    })
-    await prisma.$disconnect()
-    return news
+    });
+    await prisma.$disconnect();
+    return news;
   }),
-  addEvent: protectedProcedure.input(
-    z.object({
-      dogId: z.string(),
-      grade: z.number(),
-      height: z.number(),
-      userId: z.string(),
-      dateOfEvent: z.date(),
-      event: z.string(),
-      points: z.number(),
-      })).mutation(async ({ input }) => {
-        const event = await prisma.eventEntry.create({
-          data: {
-            dogId: input.dogId,
-            grade: input.grade,
-            height: input.height,
-            userId: input.userId,
-            dateOfEvent: input.dateOfEvent,
-            event: input.event,
-            points: input.points,
-          },
-        });
-        await prisma.$disconnect()
-        return event;
-      }),
+  addEvent: protectedProcedure
+    .input(
+      z.object({
+        dogId: z.string(),
+        grade: z.number(),
+        height: z.number(),
+        userId: z.string(),
+        dateOfEvent: z.date(),
+        event: z.string(),
+        points: z.number(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const event = await prisma.eventEntry.create({
+        data: {
+          dogId: input.dogId,
+          grade: input.grade,
+          height: input.height,
+          userId: input.userId,
+          dateOfEvent: input.dateOfEvent,
+          event: input.event,
+          points: input.points,
+        },
+      });
+      await prisma.$disconnect();
+      return event;
+    }),
+  getDogs: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const prisma = new PrismaClient();
+      const dogs = await prisma.dogs.findMany({
+        where: {
+          userId: input.userId,
+        },
+      });
+      await prisma.$disconnect();
+      return dogs;
+    }),
+  addDog: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        showName: z.string(),
+        breed: z.string(),
+        age: z.number(),
+        grade: z.number(),
+        height: z.number(),
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const dog = await prisma.dogs.create({
+        data: {
+          name: input.name,
+          showName: input.showName,
+          breed: input.breed,
+          age: input.age,
+          grade: input.grade,
+          height: input.height,
+          userId: input.userId,
+        },
+      });
+      await prisma.$disconnect();
+      return dog;
+    }),
 });
