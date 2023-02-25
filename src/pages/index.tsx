@@ -1,21 +1,27 @@
-import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { signIn, useSession } from "next-auth/react";
 import FDALogo from "../../Images/FDALogo.svg";
+import type { GetServerSideProps, NextPage } from "next";
+import { getServerAuthSession } from "../server/auth";
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerAuthSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/dashboard",
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+};
 
 const Home: NextPage = () => {
-  const router = useRouter();
-  // if signed in, redirect to the dashboard
-  const { data: session, status } = useSession();
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-  if (session) {
-    void router.push("/dashboard");
-    return <div>Redirecting...</div>;
-  }
 
   return (
     <>
