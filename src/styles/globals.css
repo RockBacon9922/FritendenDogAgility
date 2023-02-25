@@ -11,3 +11,7 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.card {
+  @apply mx-3 h-[90%] rounded-lg bg-slate-300 bg-opacity-50 p-3 text-slate-600;
+}
