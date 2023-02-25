@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 export const dbRouter = createTRPCRouter({
   getNews: protectedProcedure.query(async () => {
-    return await prisma.news.findMany({
+    const news = await prisma.news.findMany({
       orderBy: {
         createdAt: "asc",
       },
@@ -18,6 +18,8 @@ export const dbRouter = createTRPCRouter({
         content: true,
         createdAt: true,
       },
-    });
+    })
+    await prisma.$disconnect()
+    return news
   }),
 });

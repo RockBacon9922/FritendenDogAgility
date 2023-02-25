@@ -14,6 +14,7 @@ const handler = async () => {
       },
     },
   });
+  await prisma.$disconnect();
   console.log(events);
 };
 
