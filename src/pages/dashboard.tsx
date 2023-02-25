@@ -24,16 +24,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Dashboard: NextPage = ({}) => {
-  const router = useRouter();
-  // if signed in, redirect to the dashboard
-  const { data: session, status } = useSession();
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-  if (!session) {
-    void router.push("/");
-    return <></>;
-  }
+  // const router = useRouter();
+  // // if signed in, redirect to the dashboard
+  // const { data: session, status } = useSession();
+  // if (status === "loading") {
+  //   return <div>Loading...</div>;
+  // }
+  // if (!session) {
+  //   void router.push("/");
+  //   return <></>;
+  // }
 
   return (
     <>
