@@ -1,7 +1,6 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import FDALogo from "../../Images/FDALogo.svg";
 import type { GetServerSideProps, NextPage } from "next";
 import { getServerAuthSession } from "../server/auth";
