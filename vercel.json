@@ -1,8 +1,7 @@
 {
     "crons": [{
         "name": "ReCalculateScores",
-        "cron": "*/5 * * * *",
-        "path": "/api/cron"
-    }
-    ]
+        "path": "/api/cron",
+        "schedule" : "*/5 * * * *"
+    }]
 }
