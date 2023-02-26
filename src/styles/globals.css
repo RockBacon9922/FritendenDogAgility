@@ -13,5 +13,5 @@
 }
 
 .card {
-  @apply mx-3 h-[90%] rounded-lg bg-slate-300 bg-opacity-50 p-3 text-slate-600;
+  @apply mx-3 h-[90%] rounded-lg bg-primary bg-opacity-50 p-3 text-slate-600 ;
 }
