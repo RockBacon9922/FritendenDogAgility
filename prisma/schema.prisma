@@ -75,6 +75,7 @@ model Dogs {
     name       String
     showName   String
     breed      String
+    league     Int          @default(0)
     age        Int
     grade      Int          @default(1)
     height     Int          @default(4)
@@ -95,6 +96,7 @@ model eventEntry {
     userId      String
     event       String
     dateOfEvent DateTime
+    league      Int      @default(0)
     verified    Boolean  @default(false)
     points      Int      @default(0)
     createdAt   DateTime @default(now())
