@@ -1,17 +1,9 @@
-import { type GetServerSideProps, type NextPage } from "next";
+import { type GetServerSideProps } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import Image from "next/image";
-import { useSession, signOut } from "next-auth/react";
-import add from "../../Images/add.svg";
 import { getServerAuthSession } from "../server/auth";
-import Link from "next/link";
-import signOutIcon from "../../Images/signOut.svg";
-import { PrismaClient } from "@prisma/client";
 import { api } from "../utils/api";
-import { z } from "zod";
-import { FormEvent } from "react";
-import home from "../../Images/home.svg";
+import { useRouter } from "next/router";
+import { type FormEvent, useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context);
@@ -23,159 +15,196 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
-  const userId = session.user.id;
   return {
-    props: {
-      userId,
-    },
+    props: { userId: session.user.id },
   };
 };
 
-const AddAndEditDogs = ({ userId }: { userId: string }) => {
-  // get the current user
-  const dogs = api.db.getDogs.useQuery({ userId: userId });
-  const editMutation = api.db.editDog.useMutation();
-  const addMutation = api.db.addDog.useMutation({
-    onSuccess: async () => {
-      await dogs.refetch();
-    }
-  });
-  const deleteMutation = api.db.deleteDog.useMutation({
-    onSuccess: async () => {
-      await dogs.refetch();
-    }
-  });
-
-  const handleEditSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const id = e.target.id.value as string;
-    const userId = e.target.userId.value as string;
-    const name = e.target.name.value as string;
-    const breed = e.target.breed.value as string;
-    const height = parseInt(e.target.height.value as string);
-    const age = parseInt(e.target.age.value as string);
-    const grade = parseInt(e.target.grade.value as string);
-    const showName = e.target.showName.value as string;
-    return await editMutation.mutateAsync({
-      id,
-      userId,
-      name,
-      breed,
-      height,
-      age,
-      grade,
-      showName,
-    });
-  };
-
-  const deleteDog = (id: string) => async () => {
-    return await deleteMutation.mutateAsync({ id });
-  };
-
-
-  const handleAddSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const userId = e.target.userId.value as string;
-    const name = e.target.name.value as string;
-    const breed = e.target.breed.value as string;
-    const height = parseInt(e.target.height.value as string);
-    const age = parseInt(e.target.age.value as string);
-    const grade = parseInt(e.target.grade.value as string);
-    const showName = e.target.showName.value as string;
-    e.target.reset()
-    return await addMutation.mutateAsync({
-      userId,
-      name,
-      breed,
-      height,
-      age,
-      grade,
-      showName,
-    });
-  };
-
+const ManageDogs = ({ userId }: { userId: string }) => {
   return (
     <>
       <Head>
         <title>FDA League</title>
         <meta name="description" content="The dog agility league " />
       </Head>
-      {editMutation.isLoading && <UpdatingAlert />}
-      {addMutation.isLoading && <UpdatingAlert />}
-      {deleteMutation.isLoading && <UpdatingAlert />}
-      <div className="h-screen bg-base-100">
-        {dogs.data?.map((dog) => (
-          <form key={dog.id} className="" onSubmit={handleEditSubmit}>
-            <input type="hidden" name="id" defaultValue={dog.id} />
-            <input type="hidden" name="userId" defaultValue={userId} />
-            <label htmlFor="name">Name</label>
-            <input type="text" name="name" id="name" defaultValue={dog.name} />
-            <label htmlFor="breed">Breed</label>
-            <input
-              type="text"
-              name="breed"
-              id="breed"
-              defaultValue={dog.breed}
-            />
-            <label htmlFor="height">Height</label>
-            <input
-              type="text"
-              name="height"
-              id="height"
-              defaultValue={dog.height}
-            />
-            <label htmlFor="age">Age</label>
-            <input type="text" name="age" id="age" defaultValue={dog.age} />
-            <label htmlFor="grade">Grade</label>
-            <input
-              type="text"
-              name="grade"
-              id="grade"
-              defaultValue={dog.grade}
-            />
-            <label htmlFor="showName">ShowName</label>
-            <input
-              type="text"
-              name="showName"
-              id="showName"
-              defaultValue={dog.showName}
-            />
-            <button type="submit">Submit</button>
-            <p onClick={deleteDog(dog.id)}>delete</p>
-          </form>
-        ))}
-        <br />
-        <h3>Add dog</h3>
-        <form className="" onSubmit={handleAddSubmit}>
-          <input type="hidden" name="userId" defaultValue={userId} />
-          <label htmlFor="name">Name</label>
-          <input type="text" name="name" id="name" />
-          <label htmlFor="breed">Breed</label>
-          <input type="text" name="breed" id="breed" />
-          <label htmlFor="height">Height</label>
-          <input type="text" name="height" id="height" />
-          <label htmlFor="age">Age</label>
-          <input type="text" name="age" id="age" />
-          <label htmlFor="grade">Grade</label>
-          <input type="text" name="grade" id="grade" />
-          <label htmlFor="showName">ShowName</label>
-          <input type="text" name="showName" id="showName" />
-          <button type="submit">Submit</button>
-        </form>
-        <Link href="/">
-          <Image src={home} alt="Home Button" />
-        </Link>
-      </div>
+      <AddEventWarning />
+      <AddDog userId={userId} />
+      <div className=""></div>
     </>
   );
 };
 
-export default AddAndEditDogs;
+export default ManageDogs;
 
-const UpdatingAlert = () => {
+type Dog = {
+  name: string;
+  showName: string;
+  breed: string;
+  league: string;
+  age: number;
+  grade: number;
+  height: string;
+  userId: string;
+};
+
+const AddDog = ({ userId }: { userId: string }) => {
+  const mutation = api.dogs.addDog.useMutation();
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    let data = {};
+    for (const element of form.elements) {
+      if (
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLSelectElement
+      ) {
+        // add elements to data object
+        if (element.name === "age" || element.name === "grade") {
+          data = { ...data, [element.name]: parseInt(element.value) };
+          continue;
+        }
+        data = { ...data, [element.name]: element.value };
+      }
+    }
+    form.reset();
+    mutation.mutate(data as Dog);
+  };
   return (
-    <div className="alert shadow-lg">
-      <span>Updating Database Please Wait</span>
+    <div className="card">
+      {mutation.isSuccess && (
+        <SuccessMessage message="completed Successfully" />
+      )}
+      {mutation.isError && (
+        <ErrorMessage message="Something went wrong, Please try again" />
+      )}
+      <div className="card-header">
+        <h3 className="text-3xl font-extrabold text-primary">Add a dog</h3>
+      </div>
+      <div className="card-body">
+        <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+          <input
+            hidden
+            defaultValue={userId}
+            id="userId"
+            name="userId"
+            required
+          />
+          <div className="form-group">
+            <label htmlFor="name">Dog Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="name"
+              name="name"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="showName">Show Name</label>
+            <input
+              type="text"
+              className="form-control"
+              id="showName"
+              name="showName"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="breed">Breed</label>
+            <input
+              type="text"
+              className="form-control"
+              id="breed"
+              name="breed"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="league">League</label>
+            <select className="form-control" id="league" name="league">
+              <option value="FDAAllAges">
+                Frittenden Dog Agility All Ages
+              </option>
+              <option value="FDASeniors">Frittenden Dog Agility Seniors</option>
+              <option value="FDAYoungHandlers">
+                Frittenden Dog Agility Young Handlers
+              </option>
+              <option value="FDAJuniors">Frittenden Dog Agility Juniors</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="age">Age</label>
+            <input
+              type="number"
+              defaultValue={0}
+              required
+              className="form-control"
+              id="age"
+              name="age"
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="grade">Grade</label>
+            <select className="form-control" id="grade" name="grade">
+              <option value={1}>1</option>
+              <option value={2}>2</option>
+              <option value={3}>3</option>
+              <option value={4}>4</option>
+              <option value={5}>5</option>
+              <option value={6}>6</option>
+              <option value={7}>7</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="height">Height</label>
+            <select className="form-control" id="height" name="height">
+              <option value="Large">Large</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Medium">Medium</option>
+              <option value="Small">Small</option>
+              <option value="Micro">Micro</option>
+            </select>
+          </div>
+          {/* create submit button using daisy ui */}
+          <button type="submit" className="btn-primary btn">
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
+};
+
+const AddEventWarning = () => {
+  const router = useRouter();
+  const [addEvent, setAddEvent] = useState(!!router.query.addEvent);
+  setTimeout(() => {
+    setAddEvent(false);
+  }, 5000);
+  if (addEvent) {
+    return (
+      <div className="alert alert-error">
+        {" "}
+        You need to add a dog before you can add an event
+      </div>
+    );
+  }
+  return null;
+};
+
+const ErrorMessage = ({ message }: { message: string }) => {
+  const [show, setShow] = useState(true);
+  setTimeout(() => {
+    setShow(false);
+  }, 5000);
+  if (!show) return null;
+  return <div className="alert alert-error animate-ping">{message}</div>;
+};
+
+const SuccessMessage = ({ message }: { message: string }) => {
+  const [show, setShow] = useState(true);
+  setTimeout(() => {
+    setShow(false);
+  }, 5000);
+  if (!show) return null;
+  return <div className="alert alert-success animate-pulse">{message}</div>;
 };
