@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -92,4 +92,51 @@ export const dbRouter = createTRPCRouter({
       await prisma.$disconnect();
       return dog;
     }),
+    editDog: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+        showName: z.string(),
+        breed: z.string(),
+        age: z.number(),
+        grade: z.number(),
+        height: z.number(),
+        userId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const dog = await prisma.dogs.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          name: input.name,
+          showName: input.showName,
+          breed: input.breed,
+          age: input.age,
+          grade: input.grade,
+          height: input.height,
+          userId: input.userId,
+        },
+      });
+      await prisma.$disconnect();
+      return dog;
+    }),
+    deleteDog: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const dog = await prisma.dogs.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      await prisma.$disconnect();
+      return dog;
+    }
+    ),
 });
