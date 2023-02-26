@@ -57,50 +57,52 @@ model Example {
 }
 
 model User {
-    id            String       @id @default(cuid())
+    id            String    @id @default(cuid())
     name          String?
-    username      String?      @unique
-    email         String?      @unique
+    email         String?   @unique
     emailVerified DateTime?
     image         String?
-    admin         Boolean      @default(false)
+    admin         Boolean   @default(false)
     accounts      Account[]
     sessions      Session[]
     Dogs          Dogs[]
-    eventEntry    eventEntry[]
+    eventEntry    event[]
 }
 
 model Dogs {
-    id         String       @id @default(cuid())
-    name       String
-    showName   String
-    breed      String
-    league     Int          @default(0)
-    age        Int
-    grade      Int          @default(1)
-    height     Int          @default(4)
-    user       User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id         String   @id @default(cuid())
+    name       String   @default("undefined")
+    showName   String?
+    breed      String   @default("undefined")
+    league     String   @default("FDAAllAges")
+    age        Int      @default(0)
+    grade      Int      @default(1)
+    height     String   @default("Large")
+    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId     String
-    createdAt  DateTime     @default(now())
-    updatedAt  DateTime     @updatedAt
-    eventEntry eventEntry[]
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+    eventEntry event[]
 }
 
-model eventEntry {
+model event {
     id          String   @id @default(cuid())
     dog         Dogs     @relation(fields: [dogId], references: [id], onDelete: Cascade)
     dogId       String
     grade       Int      @default(1)
-    height      Int      @default(4)
+    height      String   @default("Large")
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      String
-    event       String
-    dateOfEvent DateTime
-    league      Int      @default(0)
+    eventName   String   @default("")
+    eventType   String   @default("Agility")
+    dateOfEvent DateTime @default(now())
+    league      String   @default("FDAAllAges")
     verified    Boolean  @default(false)
     points      Int      @default(0)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+
+    @@map("eventEntry")
 }
 
 model VerificationToken {

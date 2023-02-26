@@ -11,22 +11,26 @@ export const events = createTRPCRouter({
       z.object({
         dogId: z.string(),
         grade: z.number(),
-        height: z.number(),
+        height: z.string(),
         userId: z.string(),
+        eventName: z.string(),
+        eventType: z.string(),
         dateOfEvent: z.date(),
-        event: z.string(),
+        league: z.string(),
         points: z.number(),
       })
     )
     .mutation(async ({ input }) => {
-      const event = await prisma.eventEntry.create({
+      const event = await prisma.event.create({
         data: {
           dogId: input.dogId,
           grade: input.grade,
           height: input.height,
           userId: input.userId,
+          eventName: input.eventName,
+          eventType: input.eventType,
           dateOfEvent: input.dateOfEvent,
-          event: input.event,
+          league: input.league,
           points: input.points,
         },
       });
@@ -40,7 +44,7 @@ export const events = createTRPCRouter({
       })
     )
     .query(async ({ input }) => {
-      const events = await prisma.eventEntry.findMany({
+      const events = await prisma.event.findMany({
         where: {
           userId: input.userId,
         },

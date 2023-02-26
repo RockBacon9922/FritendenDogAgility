@@ -27,9 +27,10 @@ export const dogs = createTRPCRouter({
         name: z.string(),
         showName: z.string(),
         breed: z.string(),
+        league: z.string(),
         age: z.number(),
         grade: z.number(),
-        height: z.number(),
+        height: z.string(),
         userId: z.string(),
       })
     )
@@ -39,6 +40,7 @@ export const dogs = createTRPCRouter({
           name: input.name,
           showName: input.showName,
           breed: input.breed,
+          league: input.league,
           age: input.age,
           grade: input.grade,
           height: input.height,
@@ -55,9 +57,10 @@ export const dogs = createTRPCRouter({
         name: z.string(),
         showName: z.string(),
         breed: z.string(),
+        league: z.string(),
         age: z.number(),
         grade: z.number(),
-        height: z.number(),
+        height: z.string(),
         userId: z.string(),
       })
     )
