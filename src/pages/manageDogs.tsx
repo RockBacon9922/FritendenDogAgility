@@ -4,6 +4,7 @@ import { getServerAuthSession } from "../server/auth";
 import { api } from "../utils/api";
 import { useRouter } from "next/router";
 import { type FormEvent, useState } from "react";
+import Link from "next/link";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context);
@@ -28,7 +29,10 @@ const ManageDogs = ({ userId }: { userId: string }) => {
         <meta name="description" content="The dog agility league " />
       </Head>
       <AddEventWarning />
-      <AddDog userId={userId} />
+      <div className="flex justify-center gap-4 md:flex-row">
+        <AddDog userId={userId} />
+        <EditDogs userId={userId} />
+      </div>
       <div className=""></div>
     </>
   );
@@ -78,7 +82,7 @@ const AddDog = ({ userId }: { userId: string }) => {
         <ErrorMessage message="Something went wrong, Please try again" />
       )}
       <div className="card-header">
-        <h3 className="text-3xl font-extrabold text-primary">Add a dog</h3>
+        <h3 className="text-3xl font-extrabold text-primary">Add a Dog</h3>
       </div>
       <div className="card-body">
         <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -169,6 +173,52 @@ const AddDog = ({ userId }: { userId: string }) => {
             Submit
           </button>
         </form>
+      </div>
+    </div>
+  );
+};
+
+const EditDogs = ({ userId }: { userId: string }) => {
+  const dogs = api.dogs.getDogs.useQuery({ userId });
+  if (dogs.isLoading) return <div>Loading...</div>;
+  return (
+    <div className="card">
+      <div className="card-header">
+        <h3 className="text-3xl font-extrabold text-primary">Edit Dogs</h3>
+      </div>
+      <div className="card-body">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Show Name</th>
+              <th>Breed</th>
+              <th>League</th>
+              <th>Age</th>
+              <th>Grade</th>
+              <th>Height</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {dogs.data?.map((dog) => (
+              <tr key={dog.id}>
+                <td>{dog.name}</td>
+                <td>{dog.showName}</td>
+                <td>{dog.breed}</td>
+                <td>{dog.league}</td>
+                <td>{dog.age}</td>
+                <td>{dog.grade}</td>
+                <td>{dog.height}</td>
+                <td>
+                  <Link href={`/dogs/${dog.id}`}>
+                    <p className="btn-primary btn">Edit</p>
+                  </Link>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
