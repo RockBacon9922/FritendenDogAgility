@@ -1,12 +1,15 @@
 import { type GetServerSideProps, type NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import Image from "next/image";
-import { useSession, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import add from "../../Images/add.svg";
 import { getServerAuthSession } from "../server/auth";
 import Link from "next/link";
 import signOutIcon from "../../Images/signOut.svg";
+import pawPrint from "../../Images/pawPrint.svg";
+import manageAccount from "../../Images/manageAccount.svg";
+import menuIcon from "../../Images/menu.svg";
+import rosette from "../../Images/rosette.svg";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context);
@@ -68,11 +71,23 @@ const LeagueTable = () => {
 
 const Menu = () => {
   return (
-    <ul className="card">
+    <div className="card grid">
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
+      <MenuItem
+        link={"/manageAccount"}
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        icon={manageAccount}
+        text="Manage Account"
+      />
+      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+      <MenuItem link={"/manageDogs"} icon={pawPrint} text="Manage Dogs" />
+       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+      <MenuItem link={"/eventLog"} icon={menuIcon} text="Event Log" />
+       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+      <MenuItem link={"/rewards"} icon={rosette} text="Rewards" />
       <SignOutComponent />
-    </ul>
+    </div>
   );
 };
 
@@ -86,22 +101,19 @@ const MenuItem = ({
   text: string;
 }) => {
   return (
-    <li className="">
-      <Link
-        href={link}
-        className="flex flex-row items-center gap-5 font-bold"
-      >
+    <div className="">
+      <Link href={link} className="flex flex-row items-center gap-5 font-bold">
         {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
         <Image src={icon} alt="text" width={50} height={50} />
         <h3>{text}</h3>
       </Link>
-    </li>
+    </div>
   );
 };
 
 const SignOutComponent = () => {
   return (
-    <li className="">
+    <div className="">
       <button
         onClick={() => void signOut()}
         className="flex flex-row items-center gap-5 font-bold"
@@ -110,7 +122,6 @@ const SignOutComponent = () => {
         <Image src={signOutIcon} alt="text" width={50} height={50} />
         <h3>Logout</h3>
       </button>
-    </li>
+    </div>
   );
 };
-
