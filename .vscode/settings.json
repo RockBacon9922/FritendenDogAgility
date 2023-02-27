@@ -1,4 +1,5 @@
 {
   "cSpell.words": ["extrabold", "Frittenden", "TRPC"],
-  "gitlens.telemetry.enabled": false
+  "gitlens.telemetry.enabled": false,
+  "timetracker.useCompactStatusPanel": true
 }
