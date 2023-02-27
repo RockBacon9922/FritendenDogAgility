@@ -1,9 +1,13 @@
+// TODO: I need to work out why the cookie alert just pops off of the screen
+
 import Head from "next/head";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import FDALogo from "../../Images/FDALogo.svg";
 import type { GetServerSideProps, NextPage } from "next";
 import { getServerAuthSession } from "../server/auth";
+import { motion } from "framer-motion";
+import { useState } from "react";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context);
@@ -21,7 +25,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 const Home: NextPage = () => {
-
   return (
     <>
       <Head>
@@ -31,6 +34,7 @@ const Home: NextPage = () => {
           content="The Fritenden dog agility login page"
         />
       </Head>
+      <CookieAlert />
       <div className="flex h-screen w-full grid-cols-4 justify-center bg-gradient-to-t from-emerald-100 to-teal-50 md:grid">
         <div className="place-self-center">
           {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
@@ -72,5 +76,49 @@ const Providers = () => {
         </div>
       ))}
     </div>
+  );
+};
+
+const CookieAlert = () => {
+  const [show, setShow] = useState(true);
+  setTimeout(() => {
+    setShow(false);
+  }, 5000);
+  if (!show) {
+    return <></>;
+  }
+  return (
+    <motion.div
+      className="alert fixed top-10 self-center bg-white/50 shadow-lg backdrop-blur"
+      initial={{
+        opacity: 0,
+        y: -100,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      exit={{
+        opacity: 0,
+        y: -100,
+      }}
+    >
+      <div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          className="h-6 w-6 flex-shrink-0 stroke-info"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        <span>We use cookies for the website to function.</span>
+      </div>
+    </motion.div>
   );
 };
