@@ -32,7 +32,7 @@ const EditPage: React.FC<EditPageProps> = ({ userId }) => {
   // get dog id from url
   const router = useRouter();
   const { dog: dogSlug } = router.query;
-  const getDog = api.dogs.getDog.useQuery({ id: dogSlug });
+  const getDog = api.dogs.getDog.useQuery({ id: dogSlug as string });
   const { data: dog } = getDog;
   const editMutation = api.dogs.editDog.useMutation({
     onSuccess: async () => {
