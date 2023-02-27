@@ -39,6 +39,14 @@ const EditPage: React.FC<EditPageProps> = ({ userId }) => {
       await router.push("/manageDogs");
     },
   });
+  const deleteMutation = api.dogs.deleteDog.useMutation({
+    onSuccess: async () => {
+      await router.push("/manageDogs");
+    },
+  });
+  const handleDelete = () => {
+    deleteMutation.mutate({ id: dog?.id as string });
+  };
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -187,6 +195,18 @@ const EditPage: React.FC<EditPageProps> = ({ userId }) => {
             Submit
           </button>
         </form>
+        <span>
+          <button className="btn-primary btn" onClick={() => router.back()}>
+            Back
+          </button>
+          <button
+            id="delete dog"
+            className="btn-error btn"
+            onClick={handleDelete}
+          >
+            Delete Dog
+          </button>
+        </span>
       </div>
     </div>
   );
