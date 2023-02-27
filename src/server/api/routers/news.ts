@@ -11,6 +11,7 @@ export const news = createTRPCRouter({
       },
       take: 3,
       select: {
+        id: true,
         title: true,
         content: true,
         createdAt: true,
