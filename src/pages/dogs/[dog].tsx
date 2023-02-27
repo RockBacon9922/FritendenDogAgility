@@ -1,11 +1,13 @@
-import { type GetServerSideProps } from "next";
-import Head from "next/head";
-import { getServerAuthSession } from "../server/auth";
-import { api } from "../utils/api";
 import { useRouter } from "next/router";
-import { type FormEvent, useState } from "react";
-import Link from "next/link";
-import type Dog from "../types/Dog";
+import { api } from "../../utils/api";
+import { type FormEvent } from "react";
+import type Dog from "../../types/Dog";
+import type { GetServerSideProps } from "next";
+import { getServerAuthSession } from "../../server/auth";
+
+interface EditDog extends Dog {
+  id: string;
+}
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context);
@@ -22,50 +24,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-type ManageDogsProps = {
+type EditPageProps = {
   userId: string;
 };
 
-const ManageDogs: React.FC<ManageDogsProps> = ({ userId }) => {
-  const dogs = api.dogs.getDogs.useQuery({ userId });
-  const mutation = api.dogs.addDog.useMutation({
+const EditPage: React.FC<EditPageProps> = ({ userId }) => {
+  // get dog id from url
+  const router = useRouter();
+  const { dog: dogSlug } = router.query;
+  const getDog = api.dogs.getDog.useQuery({ id: dogSlug });
+  const { data: dog } = getDog;
+  const editMutation = api.dogs.editDog.useMutation({
     onSuccess: async () => {
-      await dogs.refetch();
+      await router.push("/manageDogs");
     },
   });
-  const handleAddDog = (dog: Dog) => {
-    mutation.mutate(dog);
-  };
-  return (
-    <>
-      <Head>
-        <title>FDA League</title>
-        <meta name="description" content="The dog agility league " />
-      </Head>
-      {mutation.isSuccess && (
-        <SuccessMessage message="completed Successfully" />
-      )}
-      {mutation.isError && (
-        <ErrorMessage message="Something went wrong, Please try again" />
-      )}
-      <AddEventWarning />
-      <div className="flex justify-center gap-4 md:flex-row">
-        <AddDog userId={userId} onAddDog={handleAddDog} />
-        <EditDogs dogData={dogs.data} />
-      </div>
-      <div className=""></div>
-    </>
-  );
-};
-
-export default ManageDogs;
-
-type AddDogProps = {
-  userId: string;
-  onAddDog: (dog: Dog) => void;
-};
-
-const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -83,13 +56,14 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
         data = { ...data, [element.name]: element.value };
       }
     }
-    form.reset();
-    onAddDog(data as unknown as Dog);
+    editMutation.mutate(data as unknown as EditDog);
+    if (getDog.isLoading) return <div>Loading...</div>;
+    if (getDog.isError) return <div>Error: {getDog.error.message}</div>;
   };
   return (
     <div className="card">
       <div className="card-header">
-        <h3 className="text-3xl font-extrabold text-primary">Add a Dog</h3>
+        <h3 className="text-3xl font-extrabold text-primary">Edit A Dog</h3>
       </div>
       <div className="my-2 mx-8">
         <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
@@ -100,6 +74,7 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
             name="userId"
             required
           />
+          <input hidden defaultValue={dog?.id} id="id" name="id" required />
           <div className="form-control">
             <label htmlFor="name" className="labelClass">
               Dog Name
@@ -109,6 +84,7 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
               className="inputClass"
               id="name"
               name="name"
+              defaultValue={dog?.name}
               required
             />
           </div>
@@ -120,6 +96,7 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
               type="text"
               className="inputClass"
               id="showName"
+              defaultValue={dog?.showName}
               name="showName"
             />
           </div>
@@ -132,6 +109,7 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
               className="inputClass"
               id="breed"
               name="breed"
+              defaultValue={dog?.breed}
               required
             />
           </div>
@@ -139,7 +117,12 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
             <label htmlFor="league" className="labelClass">
               League
             </label>
-            <select className="selectClass" id="league" name="league">
+            <select
+              className="selectClass"
+              id="league"
+              name="league"
+              defaultValue={dog?.league}
+            >
               <option value="FDAAllAges">
                 Frittenden Dog Agility All Ages
               </option>
@@ -156,18 +139,23 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
             </label>
             <input
               type="number"
-              defaultValue={0}
               required
               className="selectClass"
               id="age"
               name="age"
+              defaultValue={dog?.age}
             />
           </div>
           <div className="form-control">
             <label htmlFor="grade" className="labelClass">
               Grade
             </label>
-            <select className="selectClass" id="grade" name="grade">
+            <select
+              className="selectClass"
+              id="grade"
+              name="grade"
+              defaultValue={dog?.grade}
+            >
               <option value={1}>1</option>
               <option value={2}>2</option>
               <option value={3}>3</option>
@@ -181,7 +169,12 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
             <label htmlFor="height" className="labelClass">
               Height
             </label>
-            <select className="selectClass" id="height" name="height">
+            <select
+              className="selectClass"
+              id="height"
+              name="height"
+              defaultValue={dog?.height}
+            >
               <option value="Large">Large</option>
               <option value="Intermediate">Intermediate</option>
               <option value="Medium">Medium</option>
@@ -199,95 +192,4 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
   );
 };
 
-interface EditDog extends Dog {
-  id: string;
-}
-
-type EditDogsProps = {
-  // extend dog type with id
-  dogData: EditDog[] | undefined;
-};
-
-const EditDogs: React.FC<EditDogsProps> = ({ dogData }) => {
-  // check if dogData is undefined
-  if (!dogData) {
-    return <div>Loading...</div>;
-  }
-  return (
-    <div className="card">
-      <div className="card-header">
-        <h3 className="text-3xl font-extrabold text-primary">Edit Dogs</h3>
-      </div>
-      <div className="card-body">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Show Name</th>
-              <th>Breed</th>
-              <th>League</th>
-              <th>Age</th>
-              <th>Grade</th>
-              <th>Height</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dogData?.map((dog) => (
-              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-              <tr key={dog.id}>
-                <td>{dog.name}</td>
-                <td>{dog.showName}</td>
-                <td>{dog.breed}</td>
-                <td>{dog.league}</td>
-                <td>{dog.age}</td>
-                <td>{dog.grade}</td>
-                <td>{dog.height}</td>
-                <td>
-                  <Link href={`/dogs/${dog.id}`}>
-                    <p className="btn-primary btn">Edit</p>
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-};
-
-const AddEventWarning = () => {
-  const router = useRouter();
-  const [addEvent, setAddEvent] = useState(!!router.query.addEvent);
-  setTimeout(() => {
-    setAddEvent(false);
-  }, 5000);
-  if (addEvent) {
-    return (
-      <div className="alert alert-error">
-        {" "}
-        You need to add a dog before you can add an event
-      </div>
-    );
-  }
-  return null;
-};
-
-const ErrorMessage = ({ message }: { message: string }) => {
-  const [show, setShow] = useState(true);
-  setTimeout(() => {
-    setShow(false);
-  }, 5000);
-  if (!show) return null;
-  return <div className="alert alert-error animate-ping">{message}</div>;
-};
-
-const SuccessMessage = ({ message }: { message: string }) => {
-  const [show, setShow] = useState(true);
-  setTimeout(() => {
-    setShow(false);
-  }, 5000);
-  if (!show) return null;
-  return <div className="alert alert-success animate-pulse">{message}</div>;
-};
+export default EditPage;

@@ -21,6 +21,21 @@ export const dogs = createTRPCRouter({
       await prisma.$disconnect();
       return dogs;
     }),
+  getDog: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const dog = await prisma.dogs.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      await prisma.$disconnect();
+      return dog;
+    }),
   addDog: protectedProcedure
     .input(
       z.object({
