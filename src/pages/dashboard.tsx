@@ -75,7 +75,7 @@ type NewsProps = {
 
 const News: React.FC<NewsProps> = ({ news }) => {
   return (
-    <div className="mx-3 h-[90%] rounded-lg bg-slate-300 bg-opacity-50 p-3 text-slate-600">
+    <div className="card text-slate-600">
       <h2 className="text-center text-xl font-extrabold tracking-tight ">
         The News
       </h2>
@@ -99,7 +99,7 @@ const LeagueTable = () => {
 
 const Menu = () => {
   return (
-    <div className="card grid">
+    <div className="card grid grid-cols-2 md:grid-cols-1">
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
       <MenuItem
