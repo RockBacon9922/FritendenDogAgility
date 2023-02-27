@@ -71,9 +71,9 @@ model User {
 
 model Dogs {
     id         String   @id @default(cuid())
-    name       String   @default("undefined")
-    showName   String?
-    breed      String   @default("undefined")
+    name       String   @default("")
+    showName   String   @default("")
+    breed      String   @default("unknown")
     league     String   @default("FDAAllAges")
     age        Int      @default(0)
     grade      Int      @default(1)
