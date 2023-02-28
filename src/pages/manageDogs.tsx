@@ -51,7 +51,7 @@ const ManageDogs: React.FC<ManageDogsProps> = ({ userId }) => {
         <ErrorMessage message="Something went wrong, Please try again" />
       )}
       <AddEventWarning />
-      <div className="flex justify-center gap-4 md:flex-row">
+      <div className="flex flex-col justify-center gap-4 md:flex-row">
         <AddDog userId={userId} onAddDog={handleAddDog} />
         <EditDogs dogData={dogs.data} />
       </div>
@@ -224,11 +224,11 @@ const EditDogs: React.FC<EditDogsProps> = ({ dogData }) => {
       <div className="card-header">
         <h3 className="text-3xl font-extrabold text-primary">Edit Dogs</h3>
       </div>
-      <div className="card-body">
+      <div className="card-body overflow-x-auto">
         <table className="table">
           <thead>
             <tr>
-              <th>Name</th>
+              <th className="">Name</th>
               <th>Show Name</th>
               <th>Breed</th>
               <th>League</th>
