@@ -1,0 +1,11 @@
+next time keep working on the add event system, need to work on calculating socres.
+
+types will need to be updated as you changed the dateabase
+
+show the score of the user as they input their data real time.
+
+finally add page to show all of your events
+
+then create league tabel. Could use static props to calculate the table and have it refresh only every 10 minuets or so?
+
+make it so that only fda green team members can join the site.
