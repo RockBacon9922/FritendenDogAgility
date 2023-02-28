@@ -39,13 +39,6 @@ const Dashboard: NextPage = ({}) => {
   //   return <></>;
   // }
 
-  const newsQuery = api.news.getNews.useQuery();
-  const { data: news } = newsQuery;
-
-  if (newsQuery.isLoading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <Head>
@@ -53,7 +46,7 @@ const Dashboard: NextPage = ({}) => {
         <meta name="description" content="The dog agility league " />
       </Head>
       <div className="grid h-screen w-full grid-rows-4 items-center bg-gradient-to-t from-emerald-400 to-teal-200 md:grid-cols-4 md:grid-rows-1">
-        <News news={news} />
+        <News />
         <LeagueTable />
         <Menu />
       </div>
@@ -63,17 +56,13 @@ const Dashboard: NextPage = ({}) => {
 
 export default Dashboard;
 
-type NewsProps = {
-  news?:
-    | {
-        id: string;
-        title: string;
-        content: string;
-        createdAt: Date;
-      }[];
-};
+const News: React.FC = () => {
+  const newsQuery = api.news.getNews.useQuery();
+  const { data: news } = newsQuery;
 
-const News: React.FC<NewsProps> = ({ news }) => {
+  if (newsQuery.isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="card text-slate-600">
       <h2 className="text-center text-xl font-extrabold tracking-tight ">
@@ -101,7 +90,7 @@ const Menu = () => {
   return (
     <div className="card grid grid-cols-2 md:grid-cols-1">
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-      <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
+      <MenuItem link={"/manageEvents"} icon={add} text="Record An Event" />
       <MenuItem
         link={"/manageAccount"}
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
