@@ -5,7 +5,9 @@ import { api } from "../utils/api";
 import { useRouter } from "next/router";
 import { type FormEvent, useState } from "react";
 import Link from "next/link";
+import home from "../../Images/home.svg";
 import type Dog from "../types/Dog";
+import Image from "next/image";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getServerAuthSession(context);
@@ -88,6 +90,10 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
   };
   return (
     <div className="card">
+      <Link href="/">
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        <Image src={home} alt="return home" />
+      </Link>
       <div className="card-header">
         <h3 className="text-3xl font-extrabold text-primary">Add a Dog</h3>
       </div>
@@ -232,7 +238,7 @@ const EditDogs: React.FC<EditDogsProps> = ({ dogData }) => {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="overflow-y-scroll">
             {dogData?.map((dog) => (
               // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
               <tr key={dog.id}>
