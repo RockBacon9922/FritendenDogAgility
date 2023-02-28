@@ -96,13 +96,46 @@ model event {
     eventName   String   @default("")
     eventType   String   @default("Agility")
     dateOfEvent DateTime @default(now())
-    league      String   @default("FDAAllAges")
+    league      league   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+    leagueId    String
+    place       Int      @default(0)
     verified    Boolean  @default(false)
     points      Int      @default(0)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
     @@map("eventEntry")
+}
+
+model league {
+    id             String   @id @default(cuid())
+    name           String   @default("FDAAllAges")
+    startDate      DateTime @default(now())
+    endDate        DateTime @default(now())
+    initialPoints  Int      @default(0)
+    agilityFirst   Int      @default(10)
+    agilitySecond  Int      @default(8)
+    agilityThird   Int      @default(6)
+    agilityFourth  Int      @default(4)
+    agilityFifth   Int      @default(2)
+    agilitySixth   Int      @default(1)
+    agilitySeventh Int      @default(0)
+    agilityEighth  Int      @default(0)
+    agilityNinth   Int      @default(0)
+    agilityTenth   Int      @default(0)
+    jumpingFirst   Int      @default(7)
+    jumpingSecond  Int      @default(4)
+    jumpingThird   Int      @default(2)
+    jumpingFourth  Int      @default(1)
+    jumpingFifth   Int      @default(0)
+    jumpingSixth   Int      @default(0)
+    jumpingSeventh Int      @default(0)
+    jumpingEighth  Int      @default(0)
+    jumpingNinth   Int      @default(0)
+    jumpingTenth   Int      @default(0)
+    createdAt      DateTime @default(now())
+    updatedAt      DateTime @updatedAt
+    event          event[]
 }
 
 model VerificationToken {
