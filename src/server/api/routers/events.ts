@@ -37,7 +37,7 @@ export const events = createTRPCRouter({
       await prisma.$disconnect();
       return event;
     }),
-  getEvents: protectedProcedure
+  getEventsByUserId: protectedProcedure
     .input(
       z.object({
         userId: z.string(),
@@ -47,6 +47,36 @@ export const events = createTRPCRouter({
       const events = await prisma.event.findMany({
         where: {
           userId: input.userId,
+        },
+      });
+      await prisma.$disconnect();
+      return events;
+    }),
+  getEventsByDogId: protectedProcedure
+    .input(
+      z.object({
+        dogId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const events = await prisma.event.findMany({
+        where: {
+          dogId: input.dogId,
+        },
+      });
+      await prisma.$disconnect();
+      return events;
+    }),
+  getEventsByLeague: protectedProcedure
+    .input(
+      z.object({
+        league: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const events = await prisma.event.findMany({
+        where: {
+          league: input.league,
         },
       });
       await prisma.$disconnect();
