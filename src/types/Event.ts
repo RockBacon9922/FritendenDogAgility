@@ -8,6 +8,7 @@ type Event = {
   eventType: string;
   dateOfEvent: Date;
   leagueId: string;
+  place: number;
   points: number;
 };
 
