@@ -2,33 +2,16 @@ import { useRouter } from "next/router";
 import { api } from "../../utils/api";
 import { type FormEvent } from "react";
 import type Dog from "../../types/Dog";
-import type { GetServerSideProps } from "next";
-import { getServerAuthSession } from "../../server/auth";
+import { useSession } from "next-auth/react";
 
 interface EditDog extends Dog {
   id: string;
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: { userId: session.user.id },
-  };
-};
-
-type EditPageProps = {
-  userId: string;
-};
-
-const EditPage: React.FC<EditPageProps> = ({ userId }) => {
+const EditPage: React.FC = () => {
+  const { data: session, status } = useSession();
+  const userId = session?.user.id as string;
+  const leagues = api.leagues.getActiveLeagues.useQuery();
   // get dog id from url
   const router = useRouter();
   const { dog: dogSlug } = router.query;
@@ -47,6 +30,11 @@ const EditPage: React.FC<EditPageProps> = ({ userId }) => {
   const handleDelete = () => {
     deleteMutation.mutate({ id: dog?.id as string });
   };
+  if (status === "loading") return <div>Loading...</div>;
+  if (!session) {
+    void router.push("/");
+    return <div>Redirecting...</div>;
+  }
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -122,23 +110,20 @@ const EditPage: React.FC<EditPageProps> = ({ userId }) => {
             />
           </div>
           <div className="form-control">
-            <label htmlFor="league" className="labelClass">
+            <label htmlFor="leagueId" className="labelClass">
               League
             </label>
             <select
               className="selectClass"
-              id="league"
-              name="league"
-              defaultValue={dog?.league}
+              id="leagueId"
+              name="leagueId"
+              defaultValue={dog?.leagueId}
             >
-              <option value="FDAAllAges">
-                Frittenden Dog Agility All Ages
-              </option>
-              <option value="FDASeniors">Frittenden Dog Agility Seniors</option>
-              <option value="FDAYoungHandlers">
-                Frittenden Dog Agility Young Handlers
-              </option>
-              <option value="FDAJuniors">Frittenden Dog Agility Juniors</option>
+              {leagues.data?.map((league) => (
+                <option key={league.id} value={league.id}>
+                  {league.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-control">

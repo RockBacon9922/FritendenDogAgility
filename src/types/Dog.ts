@@ -2,7 +2,7 @@ type Dog = {
   name: string;
   showName: string;
   breed: string;
-  league: string;
+  leagueId: string;
   age: number;
   grade: number;
   height: string;

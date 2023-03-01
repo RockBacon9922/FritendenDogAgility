@@ -1,6 +1,5 @@
-import { type GetServerSideProps } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
-import { getServerAuthSession } from "../server/auth";
 import { api } from "../utils/api";
 import { useRouter } from "next/router";
 import { type FormEvent, useState } from "react";
@@ -8,27 +7,41 @@ import Link from "next/link";
 import home from "../../Images/home.svg";
 import type Dog from "../types/Dog";
 import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { PrismaClient } from "@prisma/client";
+import type { GetStaticProps } from "next";
+import type League from "../types/League";
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
+export const getStaticProps: GetStaticProps = async () => {
+  const prisma = new PrismaClient();
+  const leagues = await prisma.league.findMany({
+    where: {
+      active: true,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
+  await prisma.$disconnect();
+
   return {
-    props: { userId: session.user.id },
+    props: {
+      leagues,
+    },
+    revalidate: 86400,
   };
 };
 
 type ManageDogsProps = {
-  userId: string;
+  leagues: League[];
 };
 
-const ManageDogs: React.FC<ManageDogsProps> = ({ userId }) => {
+const ManageDogs: NextPage<ManageDogsProps> = ({ leagues }) => {
+  const router = useRouter();
+  // if signed in, redirect to the dashboard
+  const { data: session, status } = useSession();
+  const userId = session?.user.id as string;
   const dogs = api.dogs.getDogs.useQuery({ userId });
   const mutation = api.dogs.addDog.useMutation({
     onSuccess: async () => {
@@ -38,6 +51,13 @@ const ManageDogs: React.FC<ManageDogsProps> = ({ userId }) => {
   const handleAddDog = (dog: Dog) => {
     mutation.mutate(dog);
   };
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+  if (!session) {
+    void router.push("/");
+    return <></>;
+  }
   return (
     <>
       <Head>
@@ -52,7 +72,7 @@ const ManageDogs: React.FC<ManageDogsProps> = ({ userId }) => {
       )}
       <AddEventWarning />
       <div className="flex flex-col justify-center gap-4 md:flex-row">
-        <AddDog userId={userId} onAddDog={handleAddDog} />
+        <AddDog userId={userId} onAddDog={handleAddDog} leagues={leagues} />
         <EditDogs dogData={dogs.data} />
       </div>
       <div className=""></div>
@@ -64,10 +84,11 @@ export default ManageDogs;
 
 type AddDogProps = {
   userId: string;
+  leagues: League[];
   onAddDog: (dog: Dog) => void;
 };
 
-const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
+const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog, leagues }) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -142,18 +163,15 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog }) => {
             />
           </div>
           <div className="form-control">
-            <label htmlFor="league" className="labelClass">
+            <label htmlFor="leagueId" className="labelClass">
               League
             </label>
-            <select className="selectClass" id="league" name="league">
-              <option value="FDAAllAges">
-                Frittenden Dog Agility All Ages
-              </option>
-              <option value="FDASeniors">Frittenden Dog Agility Seniors</option>
-              <option value="FDAYoungHandlers">
-                Frittenden Dog Agility Young Handlers
-              </option>
-              <option value="FDAJuniors">Frittenden Dog Agility Juniors</option>
+            <select className="selectClass" id="leagueId" name="leagueId">
+              {leagues.map((league) => (
+                <option key={league.id} value={league.id}>
+                  {league.name}
+                </option>
+              ))}
             </select>
           </div>
           <div className="form-control">
@@ -245,12 +263,12 @@ const EditDogs: React.FC<EditDogsProps> = ({ dogData }) => {
                 <td>{dog.name}</td>
                 <td>{dog.showName}</td>
                 <td>{dog.breed}</td>
-                <td>{dog.league}</td>
+                <td>{dog.leagueId}</td>
                 <td>{dog.age}</td>
                 <td>{dog.grade}</td>
                 <td>{dog.height}</td>
                 <td>
-                  <Link href={`/dogs/${dog.id}`}>
+                  <Link href={`/dogs/${dog.id}/?e="edit"`}>
                     <p className="btn-primary btn">Edit</p>
                   </Link>
                 </td>
