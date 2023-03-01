@@ -1,4 +1,4 @@
-import { type GetServerSideProps, type NextPage } from "next";
+import { GetStaticProps, GetStaticPropsContext, type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
@@ -11,33 +11,20 @@ import manageAccount from "../../Images/manageAccount.svg";
 import menuIcon from "../../Images/menu.svg";
 import rosette from "../../Images/rosette.svg";
 import { api } from "../utils/api";
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerAuthSession(context);
-  if (!session) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-  return {
-    props: {},
-  };
-};
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 const Dashboard: NextPage = ({}) => {
-  // const router = useRouter();
-  // // if signed in, redirect to the dashboard
-  // const { data: session, status } = useSession();
-  // if (status === "loading") {
-  //   return <div>Loading...</div>;
-  // }
-  // if (!session) {
-  //   void router.push("/");
-  //   return <></>;
-  // }
+  const router = useRouter();
+  // if signed in, redirect to the dashboard
+  const { data: session, status } = useSession();
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+  if (!session) {
+    void router.push("/");
+    return <></>;
+  }
 
   return (
     <>
