@@ -113,6 +113,7 @@ model event {
 model league {
     id             String         @id @default(cuid())
     name           String         @default("FDAAllAges")
+    active         Boolean        @default(true)
     startDate      DateTime       @default(now())
     endDate        DateTime       @default(now())
     initialPoints  Int            @default(0)

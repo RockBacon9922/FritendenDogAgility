@@ -1,0 +1,30 @@
+type League = {
+  id: string;
+  name: string;
+  active: boolean;
+  startDate: Date;
+  endDate: Date;
+  initialPoints: number;
+  agilityFirst: number;
+  agilitySecond: number;
+  agilityThird: number;
+  agilityFourth: number;
+  agilityFifth: number;
+  agilitySixth: number;
+  agilitySeventh: number;
+  agilityEighth: number;
+  agilityNinth: number;
+  agilityNoPlace: number;
+  jumpingFirst: number;
+  jumpingSecond: number;
+  jumpingThird: number;
+  jumpingFourth: number;
+  jumpingFifth: number;
+  jumpingSixth: number;
+  jumpingSeventh: number;
+  jumpingEighth: number;
+  jumpingNinth: number;
+  jumpingNoPlace: number;
+};
+
+export default League;
