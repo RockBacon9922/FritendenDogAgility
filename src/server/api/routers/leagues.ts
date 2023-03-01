@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const news = createTRPCRouter({
+export const leagues = createTRPCRouter({
   getActiveLeagues: protectedProcedure.query(async () => {
     const leagues = await prisma.league.findMany({
       where: {
