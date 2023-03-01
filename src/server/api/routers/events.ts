@@ -16,7 +16,7 @@ export const events = createTRPCRouter({
         eventName: z.string(),
         eventType: z.string(),
         dateOfEvent: z.date(),
-        league: z.string(),
+        leagueId: z.string(),
         points: z.number(),
       })
     )
@@ -30,7 +30,7 @@ export const events = createTRPCRouter({
           eventName: input.eventName,
           eventType: input.eventType,
           dateOfEvent: input.dateOfEvent,
-          league: input.league,
+          leagueId: input.leagueId,
           points: input.points,
         },
       });
@@ -70,13 +70,13 @@ export const events = createTRPCRouter({
   getEventsByLeague: protectedProcedure
     .input(
       z.object({
-        league: z.string(),
+        leagueId: z.string(),
       })
     )
     .query(async ({ input }) => {
       const events = await prisma.event.findMany({
         where: {
-          league: input.league,
+          leagueId: input.leagueId,
         },
       });
       await prisma.$disconnect();
