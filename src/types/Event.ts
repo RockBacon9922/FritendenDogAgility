@@ -3,6 +3,7 @@ type Event = {
   grade: number;
   height: string;
   userId: string;
+  kennelClub: boolean;
   eventName: string;
   eventType: string;
   dateOfEvent: Date;

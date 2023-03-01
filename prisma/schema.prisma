@@ -94,6 +94,7 @@ model event {
     dogId       String
     grade       Int      @default(1)
     height      String   @default("Large")
+    kennelClub  Boolean  @default(false)
     user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     eventName   String   @default("")
