@@ -57,32 +57,35 @@ model Example {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String         @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?        @unique
     emailVerified DateTime?
     image         String?
-    admin         Boolean   @default(false)
+    admin         Boolean        @default(false)
     accounts      Account[]
     sessions      Session[]
     Dogs          Dogs[]
     eventEntry    event[]
+    leaguePoints  leaguePoints[]
 }
 
 model Dogs {
-    id         String   @id @default(cuid())
-    name       String   @default("")
-    showName   String   @default("")
-    breed      String   @default("unknown")
-    league     String   @default("FDAAllAges")
-    age        Int      @default(0)
-    grade      Int      @default(1)
-    height     String   @default("Large")
-    user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId     String
-    createdAt  DateTime @default(now())
-    updatedAt  DateTime @updatedAt
-    eventEntry event[]
+    id           String         @id @default(cuid())
+    name         String         @default("")
+    showName     String         @default("")
+    breed        String         @default("unknown")
+    league       league         @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+    leagueId     String
+    age          Int            @default(0)
+    grade        Int            @default(1)
+    height       String         @default("Large")
+    user         User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId       String
+    createdAt    DateTime       @default(now())
+    updatedAt    DateTime       @updatedAt
+    eventEntry   event[]
+    leaguePoints leaguePoints[]
 }
 
 model event {
@@ -108,34 +111,50 @@ model event {
 }
 
 model league {
-    id             String   @id @default(cuid())
-    name           String   @default("FDAAllAges")
-    startDate      DateTime @default(now())
-    endDate        DateTime @default(now())
-    initialPoints  Int      @default(0)
-    agilityFirst   Int      @default(10)
-    agilitySecond  Int      @default(8)
-    agilityThird   Int      @default(6)
-    agilityFourth  Int      @default(4)
-    agilityFifth   Int      @default(2)
-    agilitySixth   Int      @default(1)
-    agilitySeventh Int      @default(0)
-    agilityEighth  Int      @default(0)
-    agilityNinth   Int      @default(0)
-    agilityTenth   Int      @default(0)
-    jumpingFirst   Int      @default(7)
-    jumpingSecond  Int      @default(4)
-    jumpingThird   Int      @default(2)
-    jumpingFourth  Int      @default(1)
-    jumpingFifth   Int      @default(0)
-    jumpingSixth   Int      @default(0)
-    jumpingSeventh Int      @default(0)
-    jumpingEighth  Int      @default(0)
-    jumpingNinth   Int      @default(0)
-    jumpingTenth   Int      @default(0)
-    createdAt      DateTime @default(now())
-    updatedAt      DateTime @updatedAt
+    id             String         @id @default(cuid())
+    name           String         @default("FDAAllAges")
+    startDate      DateTime       @default(now())
+    endDate        DateTime       @default(now())
+    initialPoints  Int            @default(0)
+    agilityFirst   Int            @default(20)
+    agilitySecond  Int            @default(19)
+    agilityThird   Int            @default(18)
+    agilityFourth  Int            @default(17)
+    agilityFifth   Int            @default(16)
+    agilitySixth   Int            @default(15)
+    agilitySeventh Int            @default(14)
+    agilityEighth  Int            @default(13)
+    agilityNinth   Int            @default(12)
+    agilityNoPlace Int            @default(11)
+    jumpingFirst   Int            @default(10)
+    jumpingSecond  Int            @default(9)
+    jumpingThird   Int            @default(8)
+    jumpingFourth  Int            @default(7)
+    jumpingFifth   Int            @default(6)
+    jumpingSixth   Int            @default(5)
+    jumpingSeventh Int            @default(4)
+    jumpingEighth  Int            @default(3)
+    jumpingNinth   Int            @default(2)
+    jumpingNoPlace Int            @default(1)
+    createdAt      DateTime       @default(now())
+    updatedAt      DateTime       @updatedAt
     event          event[]
+    leaguePoints   leaguePoints[]
+    Dogs           Dogs[]
+}
+
+// create a model which tracks the users total points in a league
+model leaguePoints {
+    id        String   @id @default(cuid())
+    league    league   @relation(fields: [leagueId], references: [id], onDelete: Cascade)
+    leagueId  String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId    String
+    dog       Dogs     @relation(fields: [dogId], references: [id], onDelete: Cascade)
+    dogId     String
+    points    Int      @default(0)
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
