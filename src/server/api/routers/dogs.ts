@@ -113,4 +113,34 @@ export const dogs = createTRPCRouter({
       await prisma.$disconnect();
       return dog;
     }),
+  getDogById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const dog = await prisma.dogs.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      await prisma.$disconnect();
+      return dog;
+    }),
+  getDogsByUserId: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const dogs = await prisma.dogs.findMany({
+        where: {
+          userId: input.userId,
+        },
+      });
+      await prisma.$disconnect();
+      return dogs;
+    }),
 });
