@@ -5,7 +5,7 @@ type Event = {
   userId: string;
   eventName: string;
   eventType: string;
-  dateOfEvent: string;
+  dateOfEvent: Date;
   league: string;
   points: number;
 };
