@@ -6,6 +6,9 @@ import { type FormEvent, useState } from "react";
 import type Dog from "../types/Dog";
 import { useSession } from "next-auth/react";
 import type Event from "../types/Event";
+import Home from "../../Images/home.svg";
+import Image from "next/image";
+import Link from "next/link";
 
 interface DogWithId extends Dog {
   id: string;
@@ -123,6 +126,10 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddEvent, dogs }) => {
   return (
     <div className="card">
       <div className="card-header">
+        <Link href="/">
+          {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+          <Image src={Home} alt="home" width={50} height={50} />
+        </Link>
         <h3 className="text-3xl font-extrabold text-primary">Add a Dog</h3>
       </div>
       <div className="my-2 mx-8">
