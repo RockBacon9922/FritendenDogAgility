@@ -187,7 +187,13 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddEvent, dogs }) => {
             </select>
           </FormField>
           <FormField label="Points">
-            <input defaultValue={0} id="points" name="points" required />
+            <input
+              className="selectClass"
+              defaultValue={0}
+              id="points"
+              name="points"
+              required
+            />
           </FormField>
 
           {/* create submit button using daisy ui */}
