@@ -13,10 +13,12 @@ export const events = createTRPCRouter({
         grade: z.number(),
         height: z.string(),
         userId: z.string(),
+        kennelClub: z.boolean(),
         eventName: z.string(),
         eventType: z.string(),
         dateOfEvent: z.date(),
         leagueId: z.string(),
+        place: z.number(),
         points: z.number(),
       })
     )
@@ -27,10 +29,12 @@ export const events = createTRPCRouter({
           grade: input.grade,
           height: input.height,
           userId: input.userId,
+          kennelClub: input.kennelClub,
           eventName: input.eventName,
           eventType: input.eventType,
           dateOfEvent: input.dateOfEvent,
           leagueId: input.leagueId,
+          place: input.place,
           points: input.points,
         },
       });
