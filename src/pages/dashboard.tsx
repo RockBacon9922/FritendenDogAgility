@@ -77,12 +77,6 @@ const Menu = () => {
     <div className="card grid grid-cols-2 md:grid-cols-1">
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
-      <MenuItem
-        link={"/manageAccount"}
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        icon={manageAccount}
-        text="Manage Account"
-      />
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <MenuItem link={"/manageDogs"} icon={pawPrint} text="Manage Dogs" />
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
