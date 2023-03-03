@@ -1,9 +1,8 @@
-import { GetStaticProps, GetStaticPropsContext, type NextPage } from "next";
+import { type NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
 import add from "../../Images/add.svg";
-import { getServerAuthSession } from "../server/auth";
 import Link from "next/link";
 import signOutIcon from "../../Images/signOut.svg";
 import pawPrint from "../../Images/pawPrint.svg";
