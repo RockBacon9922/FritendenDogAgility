@@ -43,6 +43,7 @@ const EventTable: React.FC<EventTableProps> = ({ userId }) => {
     <div className="card">
       <div className="card-header flex flex-row items-center">
         <Link href="/dashboard">
+          {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
           <Image src={home} alt="home" width={50} height={50} />
         </Link>
         <h1 className="text-3xl font-extrabold text-primary">Event Log</h1>
