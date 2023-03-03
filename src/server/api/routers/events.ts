@@ -52,6 +52,27 @@ export const events = createTRPCRouter({
         where: {
           userId: input.userId,
         },
+        select: {
+          id: true,
+          dog: {
+            select: {
+              name: true,
+            },
+          },
+          grade: true,
+          height: true,
+          kennelClub: true,
+          eventName: true,
+          eventType: true,
+          dateOfEvent: true,
+          league: {
+            select: {
+              name: true,
+            },
+          },
+          place: true,
+          points: true,
+        },
       });
       await prisma.$disconnect();
       return events;
