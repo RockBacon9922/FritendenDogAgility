@@ -6,7 +6,6 @@ import add from "../../Images/add.svg";
 import Link from "next/link";
 import signOutIcon from "../../Images/signOut.svg";
 import pawPrint from "../../Images/pawPrint.svg";
-import manageAccount from "../../Images/manageAccount.svg";
 import menuIcon from "../../Images/menu.svg";
 import rosette from "../../Images/rosette.svg";
 import { api } from "../utils/api";
