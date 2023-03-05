@@ -1,4 +1,5 @@
 // TODO: get news to be pulled in getStaticProps
+// TODO: get chosen leaguetable to be pulled in getStaticProps
 
 import { type NextPage } from "next";
 import Head from "next/head";
@@ -94,6 +95,7 @@ export const getStaticProps = async () => {
   });
   return {
     props: { leagueTable },
+    revalidate: 60,
   };
 };
 
