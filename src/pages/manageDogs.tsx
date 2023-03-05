@@ -8,12 +8,11 @@ import home from "../../Images/home.svg";
 import type Dog from "../types/Dog";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../server/db";
 import type { GetStaticProps } from "next";
 import type League from "../types/League";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const prisma = new PrismaClient();
   const leagues = await prisma.league.findMany({
     where: {
       active: true,
