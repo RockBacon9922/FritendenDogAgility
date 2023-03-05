@@ -1,20 +1,22 @@
+import type { NextApiHandler } from "next";
 import { prisma } from "../../server/db";
+import { createHash } from "crypto";
 
-const handler = async () => {
+const updateLeagueTable: NextApiHandler = async (req, res) => {
   const latestLeagueTableUpdate = await prisma.leaguePoints.findFirst({
     orderBy: {
       createdAt: "desc",
     },
     select: {
-      createdAt: true,
+      updatedAt: true,
     },
   });
   const eventsToProcess = await prisma.event.findMany({
-    // where: {
-    //   createdAt: {
-    //     gte: latestLeagueTableUpdate?.createdAt,
-    //   },
-    // },
+    where: {
+      updatedAt: {
+        gt: latestLeagueTableUpdate?.updatedAt || new Date(0),
+      },
+    },
     select: {
       dogId: true,
       userId: true,
@@ -34,11 +36,17 @@ const handler = async () => {
       },
     });
     const totalPoints = (getId?.points || 0) + (event.points || 0);
+    console.log(totalPoints);
+    // create hash of dogId and leagueId
+    const hash = createHash("sha256")
+      .update(`${event.dogId}${event.leagueId}`)
+      .digest("hex");
     await prisma.leaguePoints.upsert({
       where: {
-        id: getId?.id,
+        id: getId?.id || hash,
       },
       create: {
+        id: hash,
         userId: event.userId,
         dogId: event.dogId,
         leagueId: event.leagueId,
@@ -49,6 +57,8 @@ const handler = async () => {
       },
     });
   }
+
+  res.status(200).json({ message: "ok" });
 };
 
-export default handler;
+export default updateLeagueTable;
