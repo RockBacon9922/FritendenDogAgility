@@ -1,7 +1,6 @@
 // TODO: get news to be pulled in getStaticProps
 // TODO: get chosen leaguetable to be pulled in getStaticProps
 
-import { createHash } from "crypto";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
