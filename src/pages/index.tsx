@@ -77,41 +77,39 @@ const CookieAlert = () => {
   setTimeout(() => {
     setShow(false);
   }, 5000);
-  if (!show) {
-    return <></>;
-  }
   return (
-    <motion.div
-      className="alert fixed top-10 self-center bg-white/50 shadow-lg backdrop-blur"
-      initial={{
-        opacity: 0,
-        y: -100,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      exit={{
-        opacity: 0,
-        y: -100,
-      }}
-    >
-      <div>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          className="h-6 w-6 flex-shrink-0 stroke-info"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg>
-        <span>We use cookies for the website to function.</span>
-      </div>
-    </motion.div>
+    <LazyMotion features={domAnimation}>
+      <AnimatePresence>
+        {show && (
+          <m.div
+            key="cookie-alert"
+            className="alert fixed top-10 self-center bg-white/50 shadow-lg backdrop-blur"
+            // style={{
+            //   animation: "flyInFromTop 0.5s ease-in-out",
+            // }}
+            initial={{ y: -100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -100, opacity: 0 }}
+          >
+            <div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="h-6 w-6 flex-shrink-0 stroke-info"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span>We use cookies for the website to function.</span>
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </LazyMotion>
   );
 };

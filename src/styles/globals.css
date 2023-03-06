@@ -27,3 +27,21 @@
 .selectClass {
   @apply select text-base placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-focus;
 }
+
+/* create a annimation which will have the element fly in from the top whilst increasing in opacity */
+
+@keyframes flyInFromTop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* use the animation in a class */
+.flyInFromTop {
+  animation: flyInFromTop 0.5s ease-in-out;
+}
