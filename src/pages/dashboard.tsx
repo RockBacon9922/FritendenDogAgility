@@ -32,7 +32,7 @@ const Dashboard: NextPage<DashboardProps> = ({ url }) => {
   const router = useRouter();
   useEffect(() => {
     void router.push(url);
-  }, []);
+  }, [router, url]);
   return <></>;
 };
 
