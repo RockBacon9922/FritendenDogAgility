@@ -10,21 +10,12 @@ const updateLeagueTableHandler: NextApiHandler = async (req, res) => {
 export default updateLeagueTableHandler;
 
 export const updateLeagueTable = async () => {
-  const latestLeagueTableUpdate = await prisma.leaguePoints.findFirst({
-    orderBy: {
-      createdAt: "desc",
-    },
-    select: {
-      updatedAt: true,
-    },
-  });
   const eventsToProcess = await prisma.event.findMany({
     where: {
-      updatedAt: {
-        gt: latestLeagueTableUpdate?.updatedAt || new Date(0),
-      },
+      processed: false,
     },
     select: {
+      id: true,
       dogId: true,
       userId: true,
       leagueId: true,
@@ -32,7 +23,7 @@ export const updateLeagueTable = async () => {
     },
   });
   for (const event of eventsToProcess) {
-    const getId = await prisma.leaguePoints.findFirst({
+    const getCurrentPointsAndId = await prisma.leaguePoints.findFirst({
       where: {
         dogId: event.dogId,
         leagueId: event.leagueId,
@@ -42,7 +33,8 @@ export const updateLeagueTable = async () => {
         points: true,
       },
     });
-    const totalPoints = (getId?.points || 0) + (event.points || 0);
+    const totalPoints =
+      (getCurrentPointsAndId?.points || 0) + (event.points || 0);
     console.log(totalPoints);
     // create hash of dogId and leagueId
     const hash = createHash("sha256")
@@ -50,7 +42,7 @@ export const updateLeagueTable = async () => {
       .digest("hex");
     await prisma.leaguePoints.upsert({
       where: {
-        id: getId?.id || hash,
+        id: getCurrentPointsAndId?.id || hash,
       },
       create: {
         id: hash,
@@ -61,6 +53,14 @@ export const updateLeagueTable = async () => {
       },
       update: {
         points: totalPoints,
+      },
+    });
+    await prisma.event.update({
+      where: {
+        id: event.id,
+      },
+      data: {
+        processed: true,
       },
     });
   }

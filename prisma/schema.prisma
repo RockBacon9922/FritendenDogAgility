@@ -105,6 +105,7 @@ model event {
     place       Int      @default(0)
     verified    Boolean  @default(false)
     points      Int      @default(0)
+    processed   Boolean  @default(false)
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 
