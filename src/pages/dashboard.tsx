@@ -1,5 +1,6 @@
 import type { GetStaticProps, NextPage } from "next";
 import { prisma } from "../server/db";
+import { useRouter } from "next/router";
 
 export const getStaticProps: GetStaticProps = async () => {
   const defaultLeague = await prisma.league.findFirst({
@@ -18,14 +19,17 @@ export const getStaticProps: GetStaticProps = async () => {
   const url = `/dashboard/${String(defaultLeague?.id || "FDAAllAges")}`;
 
   return {
-    redirect: {
-      destination: url,
-      permanent: false,
-    },
+    props: { url },
   };
 };
 
-const Dashboard: NextPage = () => {
+type DashboardProps = {
+  url: string;
+};
+
+const Dashboard: NextPage<DashboardProps> = ({ url }) => {
+  const router = useRouter();
+  void router.push(url);
   return <></>;
 };
 
