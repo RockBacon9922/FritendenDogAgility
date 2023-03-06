@@ -1,5 +1,4 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { z } from "zod";
 import { prisma } from "../../db";
 
 export const leagues = createTRPCRouter({
