@@ -33,8 +33,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   await updateLeagueTable();
   const leagueTable = await getLeagueTable(context.params?.id as string);
+  const activeLeagues = await prisma.league.findMany({
+    where: {
+      active: true,
+    },
+    select: {
+      id: true,
+      name: true,
+    },
+  });
   return {
-    props: { leagueTable },
+    props: { leagueTable, activeLeagues },
     revalidate: 60,
   };
 };
@@ -49,11 +58,20 @@ type LeagueTable = {
   };
 };
 
-type DashboardProps = {
-  leagueTable: LeagueTable[];
+type ActiveLeagues = {
+  id: string;
+  name: string;
 };
 
-const Dashboard: NextPage<DashboardProps> = ({ leagueTable }) => {
+type DashboardProps = {
+  leagueTable: LeagueTable[];
+  activeLeagues: ActiveLeagues[];
+};
+
+const Dashboard: NextPage<DashboardProps> = ({
+  leagueTable,
+  activeLeagues,
+}) => {
   const router = useRouter();
   // if signed in, redirect to the dashboard
   const { data: session, status } = useSession();
@@ -73,7 +91,7 @@ const Dashboard: NextPage<DashboardProps> = ({ leagueTable }) => {
       </Head>
       <div className="grid h-screen w-full grid-rows-4 items-center bg-gradient-to-t from-emerald-400 to-teal-200 md:grid-cols-4 md:grid-rows-1">
         <News />
-        <LeagueTable table={leagueTable} />
+        <LeagueTable table={leagueTable} activeLeagues={activeLeagues} />
         <Menu />
       </div>
     </>
@@ -110,18 +128,43 @@ const News: React.FC = () => {
 
 type LeagueTableProps = {
   table: LeagueTable[];
+  activeLeagues: ActiveLeagues[];
 };
 
-const LeagueTable: React.FC<LeagueTableProps> = ({ table }) => {
+const LeagueTable: React.FC<LeagueTableProps> = ({ table, activeLeagues }) => {
+  const router = useRouter();
+  const { id } = router.query;
+  // get the name of the league
+  const currentLeagueName = activeLeagues.find(
+    (league) => league.id === id
+  )?.name;
+  // removed the current league from the list of active leagues
+  const filteredActiveLeagues = activeLeagues.filter(
+    (league) => league.id !== id
+  );
   return (
     <div className="card row-span-2 md:col-span-2">
-      <table className="table">
+      <div className="card-header flex flex-row">
+        {filteredActiveLeagues.map((league) => (
+          <Link href={`/dashboard/${league.id}`} key={league.id}>
+            <h3 className=" bg-base-300 p-2 font-bold tracking-tight text-base-content">
+              {league.name}
+            </h3>
+          </Link>
+        ))}
+      </div>
+      <div className="card-header flex flex-row items-center justify-center">
+        <h3 className="w-full bg-base-200 p-2 text-center font-bold tracking-tight text-base-content">
+          {currentLeagueName}
+        </h3>
+      </div>
+      <table className="table rounded-t-none">
         <thead>
           <tr>
-            <th className="px-4 py-2">Position</th>
-            <th className="px-4 py-2">Dog</th>
-            <th className="px-4 py-2">Owner</th>
-            <th className="px-4 py-2">Points</th>
+            <th className="rounded-t-none border px-4 py-2">Position</th>
+            <th className="border px-4 py-2">Dog</th>
+            <th className="border px-4 py-2">Owner</th>
+            <th className="rounded-t-none border px-4 py-2">Points</th>
           </tr>
         </thead>
         <tbody className="overflow-y-scroll">
