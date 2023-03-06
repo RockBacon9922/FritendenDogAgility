@@ -13,10 +13,7 @@ import { useSession } from "next-auth/react";
 const Home: NextPage = () => {
   const router = useRouter();
   // if signed in, redirect to the dashboard
-  const { data: session, status } = useSession();
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  const { data: session } = useSession();
   if (session) {
     void router.push("/dashboard");
     return <></>;
