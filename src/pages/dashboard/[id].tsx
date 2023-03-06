@@ -16,6 +16,7 @@ import menuIcon from "../../../Images/menu.svg";
 import rosette from "../../../Images/rosette.svg";
 import { api } from "../../utils/api";
 import { prisma } from "../../server/db";
+import { updateLeagueTable } from "../api/updateLeagues";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = await prisma.league.findMany({
@@ -31,6 +32,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
+  await updateLeagueTable();
   const leagueTable = await getLeagueTable(context.params?.id as string);
   return {
     props: { leagueTable },

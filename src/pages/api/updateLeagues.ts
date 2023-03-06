@@ -2,7 +2,14 @@ import type { NextApiHandler } from "next";
 import { prisma } from "../../server/db";
 import { createHash } from "crypto";
 
-const updateLeagueTable: NextApiHandler = async (req, res) => {
+const updateLeagueTableHandler: NextApiHandler = async (req, res) => {
+  await updateLeagueTable();
+  res.status(200).json({ message: "ok" });
+};
+
+export default updateLeagueTableHandler;
+
+export const updateLeagueTable = async () => {
   const latestLeagueTableUpdate = await prisma.leaguePoints.findFirst({
     orderBy: {
       createdAt: "desc",
@@ -57,8 +64,5 @@ const updateLeagueTable: NextApiHandler = async (req, res) => {
       },
     });
   }
-
-  res.status(200).json({ message: "ok" });
+  return true;
 };
-
-export default updateLeagueTable;
