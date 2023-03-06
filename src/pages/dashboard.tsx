@@ -1,6 +1,7 @@
 import type { GetStaticProps, NextPage } from "next";
 import { prisma } from "../server/db";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export const getStaticProps: GetStaticProps = async () => {
   const defaultLeague = await prisma.league.findFirst({
@@ -29,7 +30,9 @@ type DashboardProps = {
 
 const Dashboard: NextPage<DashboardProps> = ({ url }) => {
   const router = useRouter();
-  void router.push(url);
+  useEffect(() => {
+    void router.push(url);
+  }, []);
   return <></>;
 };
 
