@@ -91,8 +91,8 @@ const Dashboard: NextPage<DashboardProps> = ({
       </Head>
       <div className="grid h-screen w-full grid-rows-4 items-center bg-gradient-to-t from-emerald-400 to-teal-200 md:grid-cols-4 md:grid-rows-1">
         <News />
-        <LeagueTable table={leagueTable} activeLeagues={activeLeagues} />
         <Menu />
+        <LeagueTable table={leagueTable} activeLeagues={activeLeagues} />
       </div>
     </>
   );
