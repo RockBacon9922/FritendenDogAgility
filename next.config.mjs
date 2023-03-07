@@ -5,9 +5,9 @@
  * This is especially useful for Docker builds.
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
-
+import { withAxiom } from "next-axiom";
 /** @type {import("next").NextConfig} */
-const config = {
+const config = withAxiom({
   reactStrictMode: true,
 
   /**
@@ -23,5 +23,5 @@ const config = {
   typescript: {
     ignoreBuildErrors: true,
   },
-};
+});
 export default config;
