@@ -12,6 +12,10 @@
   background-repeat: no-repeat;
 }
 
+.table th:first-child {
+  position: relative !important;
+}
+
 .card {
   @apply mx-3 h-[90%] rounded-lg bg-primary bg-opacity-50 p-3 text-slate-600;
 }
