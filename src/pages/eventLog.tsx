@@ -48,8 +48,8 @@ const EventTable: React.FC<EventTableProps> = ({ userId }) => {
         </Link>
         <h1 className="text-3xl font-extrabold text-primary">Event Log</h1>
       </div>
-      <div className="card-body">
-        <table className="table">
+      <div className="card-body overflow-x-auto">
+        <table className="table w-full">
           <thead>
             <tr>
               <th>EventName</th>
