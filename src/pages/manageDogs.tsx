@@ -1,16 +1,16 @@
-import { type NextPage } from "next";
-import Head from "next/head";
-import { api } from "../utils/api";
-import { useRouter } from "next/router";
-import { type FormEvent, useState } from "react";
-import Link from "next/link";
-import home from "../../Images/home.svg";
-import type Dog from "../types/Dog";
-import Image from "next/image";
-import { useSession } from "next-auth/react";
-import { prisma } from "../server/db";
 import type { GetStaticProps } from "next";
-import type League from "../types/League";
+import { type NextPage } from "next";
+import { useSession } from "next-auth/react";
+import Head from "next/head";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState, type FormEvent } from "react";
+import type Dog from "../../@types/Dog";
+import type League from "../../@types/League";
+import home from "../../Images/home.svg";
+import { prisma } from "../server/db";
+import { api } from "../utils/api";
 
 export const getStaticProps: GetStaticProps = async () => {
   const leagues = await prisma.league.findMany({

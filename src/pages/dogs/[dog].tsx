@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { api } from "../../utils/api";
 import { type FormEvent } from "react";
-import type Dog from "../../types/Dog";
+import type Dog from "../../../@types/Dog";
 import { useSession } from "next-auth/react";
 
 interface EditDog extends Dog {
