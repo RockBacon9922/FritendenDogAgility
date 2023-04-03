@@ -184,7 +184,7 @@ const LeagueTable: React.FC<LeagueTableProps> = ({ table, activeLeagues }) => {
 
 const Menu = () => {
   return (
-    <div className="card grid grid-cols-2 md:grid-cols-1">
+    <div className="card m-3 grid grid-cols-2 p-2 md:grid-cols-1">
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
@@ -192,7 +192,7 @@ const Menu = () => {
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
       <MenuItem link={"/eventLog"} icon={menuIcon} text="Event Log" />
       {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-      <MenuItem link={"/rewards"} icon={rosette} text="Rewards" />
+      {/* <MenuItem link={"/rewards"} icon={rosette} text="Rewards" /> */}
       <SignOutComponent />
     </div>
   );
