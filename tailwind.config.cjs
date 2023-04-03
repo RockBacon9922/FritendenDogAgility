@@ -1,7 +1,21 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   daisyui: {
-    themes: ["winter", "forest", "cmyk"],
+    themes: [
+      {
+        FDA: {
+          primary: "#22c55e",
+          secondary: "#166534",
+          accent: "#fde047",
+          neutral: "#a8a29e",
+          "base-100": "#dcfce7",
+          info: "#3ABFF8",
+          success: "#36D399",
+          warning: "#FBBD23",
+          error: "#F87272",
+        },
+      },
+    ],
   },
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
