@@ -7,8 +7,9 @@ export const getStaticProps: GetStaticProps = async () => {
   const defaultLeague = await prisma.league.findFirst({
     where: {
       id: {
-        startsWith: "FDAAllAges",
+        startsWith: "7Grades",
       },
+      active: true,
     },
     orderBy: {
       endDate: "desc",
@@ -17,7 +18,7 @@ export const getStaticProps: GetStaticProps = async () => {
       id: true,
     },
   });
-  const url = `/dashboard/${String(defaultLeague?.id || "FDAAllAges")}`;
+  const url = `/dashboard/${String(defaultLeague?.id || "7Grades[23]")}`;
 
   return {
     props: { url },
