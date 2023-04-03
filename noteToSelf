@@ -1,8 +1,10 @@
-I need you to finish the add event page
-then I need you to finish the event log page
+<!-- I need you to finish the add event page
+then I need you to finish the event log page -->
 
-next time keep working on the add event system, need to work on calculating socres.
+<!-- next time keep working on the add event system, need to work on calculating scores. -->
 
-then create league tabel. Could use static props to calculate the table and have it refresh only every 10 minuets or so?
+<!-- then create league tabel. Could use static props to calculate the table and have it refresh only every 10 minuets or so? -->
 
-make it so that only fda green team members can join the site.
+<!-- finish work on the league table system
+
+make it so that only fda green team members can join the site. -->

@@ -1,5 +1,16 @@
 {
-  "cSpell.words": ["extrabold", "Frittenden", "TRPC"],
+  "cSpell.words": [
+    "daisyui",
+    "extrabold",
+    "fritendendogagility",
+    "Frittenden",
+    "leaguetable",
+    "superjson",
+    "tabel",
+    "tailwindcss",
+    "tanstack",
+    "TRPC"
+  ],
   "gitlens.telemetry.enabled": false,
   "timetracker.useCompactStatusPanel": true
 }

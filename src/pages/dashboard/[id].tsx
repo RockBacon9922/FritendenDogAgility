@@ -12,7 +12,7 @@ import add from "../../../Images/add.svg";
 import signOutIcon from "../../../Images/signOut.svg";
 import pawPrint from "../../../Images/pawPrint.svg";
 import menuIcon from "../../../Images/menu.svg";
-import rosette from "../../../Images/rosette.svg";
+// import rosette from "../../../Images/rosette.svg";
 import { api } from "../../utils/api";
 import { prisma } from "../../server/db";
 import { updateLeagueTable } from "../api/updateLeagues";
