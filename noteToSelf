@@ -8,3 +8,6 @@ then I need you to finish the event log page -->
 <!-- finish work on the league table system
 
 make it so that only fda green team members can join the site. -->
+
+http://localhost:3000/api/auth/callback/auth0
+https://league.frittendendogagility.com/api/auth/callback/auth0

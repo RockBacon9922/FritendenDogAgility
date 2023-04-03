@@ -5,6 +5,7 @@ import {
   type DefaultSession,
 } from "next-auth";
 import FacebookProvider from "next-auth/providers/facebook";
+import Auth0Provider from "next-auth/providers/auth0";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env.mjs";
 import { prisma } from "./db";
@@ -53,6 +54,11 @@ export const authOptions: NextAuthOptions = {
       // make sure facebook client id are a string using zod
       clientId: env.FACEBOOK_CLIENT_ID,
       clientSecret: env.FACEBOOK_CLIENT_SECRET,
+    }),
+    Auth0Provider({
+      clientId: env.AUTH0_CLIENT_ID,
+      clientSecret: env.AUTH0_CLIENT_SECRET,
+      issuer: "https://fda.uk.auth0.com",
     }),
     /**
      * ...add more providers here

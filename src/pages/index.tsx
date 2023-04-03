@@ -50,24 +50,20 @@ const Home: NextPage = () => {
 export default Home;
 
 const Providers = () => {
-  // get the providers
-  const providers = {
-    facebook: { name: "Facebook", id: "facebook" },
-  };
-
   return (
     <div className="text-center">
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-          <button
-            onClick={() => void signIn(provider.id)}
-            className="m-2 rounded-md bg-gradient-to-t from-sky-500 to-sky-400 p-2 font-bold text-white"
-          >
-            Sign in with {provider.name}
-          </button>
-        </div>
-      ))}
+      <button
+        onClick={() => void signIn("facebook")}
+        className="m-2 rounded-md bg-gradient-to-t from-sky-500 to-sky-400 p-2 font-bold text-white"
+      >
+        Sign in with Facebook
+      </button>
+      <button
+        onClick={() => void signIn("auth0")}
+        className="m-2 rounded-md bg-gradient-to-b from-primary to-green-600 p-2 font-bold text-white"
+      >
+        Sign in with Username & Password
+      </button>
     </div>
   );
 };
