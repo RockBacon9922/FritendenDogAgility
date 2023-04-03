@@ -22,6 +22,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { url },
+    revalidate: 240,
   };
 };
 
