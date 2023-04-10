@@ -117,7 +117,7 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog, leagues }) => {
       <div className="card-header">
         <h3 className="text-3xl font-extrabold text-primary">Add a Dog</h3>
       </div>
-      <div className="my-2 mx-8">
+      <div className="mx-8 my-2">
         <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
           <input
             hidden
@@ -179,9 +179,10 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddDog, leagues }) => {
             </label>
             <input
               type="number"
+              pattern="\d"
               defaultValue={0}
               required
-              className="selectClass"
+              className="inputClass"
               id="age"
               name="age"
             />

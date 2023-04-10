@@ -130,9 +130,11 @@ const AddDog: React.FC<AddDogProps> = ({ userId, onAddEvent, dogs }) => {
           {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
           <Image src={Home} alt="home" width={50} height={50} />
         </Link>
-        <h3 className="text-3xl font-extrabold text-primary">Add a Dog</h3>
+        <h3 className="text-3xl font-extrabold text-primary">
+          Record An Event
+        </h3>
       </div>
-      <div className="my-2 mx-8">
+      <div className="mx-8 my-2">
         <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
           <input
             hidden
