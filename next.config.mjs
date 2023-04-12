@@ -24,4 +24,10 @@ const config = withAxiom({
     ignoreBuildErrors: true,
   },
 });
+
+config.module.rules.push({
+  test: /\.svg$/,
+  use: ["@svgr/webpack"],
+});
+
 export default config;
