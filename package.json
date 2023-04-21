@@ -37,7 +37,7 @@
     "autoprefixer": "^10.4.7",
     "devcrypt": "^1.0.6",
     "eslint": "^8.30.0",
-    "eslint-config-next": "13.1.6",
+    "eslint-config-next": "13.3.0",
     "postcss": "^8.4.14",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",
