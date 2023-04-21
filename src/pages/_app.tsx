@@ -1,6 +1,7 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
+import { Analytics } from "@vercel/analytics/react";
 
 import { api } from "../utils/api";
 
@@ -17,6 +18,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="icon" href="/FDALogo.svg?ver=4" />
       </Head>
       <Component {...pageProps} />
+      <Analytics />
     </SessionProvider>
   );
 };
