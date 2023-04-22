@@ -1,5 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { prisma } from "../../db";
+import { z } from "zod";
 
 export const leagues = createTRPCRouter({
   getActiveLeagues: protectedProcedure.query(async () => {
@@ -20,26 +21,6 @@ export const leagues = createTRPCRouter({
       select: {
         id: true,
         initialPoints: true,
-        agilityFirst: true,
-        agilitySecond: true,
-        agilityThird: true,
-        agilityFourth: true,
-        agilityFifth: true,
-        agilitySixth: true,
-        agilitySeventh: true,
-        agilityEighth: true,
-        agilityNinth: true,
-        agilityNoPlace: true,
-        jumpingFirst: true,
-        jumpingSecond: true,
-        jumpingThird: true,
-        jumpingFourth: true,
-        jumpingFifth: true,
-        jumpingSixth: true,
-        jumpingSeventh: true,
-        jumpingEighth: true,
-        jumpingNinth: true,
-        jumpingNoPlace: true,
       },
     });
     await prisma.$disconnect();
