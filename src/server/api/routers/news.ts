@@ -7,7 +7,7 @@ export const news = createTRPCRouter({
       orderBy: {
         createdAt: "asc",
       },
-      take: 3,
+      take: 1,
       select: {
         id: true,
         title: true,
