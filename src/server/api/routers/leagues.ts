@@ -1,6 +1,6 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 import { prisma } from "../../db";
-import { z } from "zod";
+// import { z } from "zod";
 
 export const leagues = createTRPCRouter({
   getActiveLeagues: protectedProcedure.query(async () => {
