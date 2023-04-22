@@ -24,7 +24,7 @@ const Home: NextPage = () => {
         <title>FDA League Login</title>
         <meta
           name="description"
-          content="The Fritenden dog agility login page"
+          content="The Frittenden Dog Agility Login Page"
         />
       </Head>
       <CookieAlert />
