@@ -21,7 +21,7 @@
     "@trpc/server": "^10.9.0",
     "@vercel/analytics": "^1.0.0",
     "daisyui": "^2.51.5",
-    "framer-motion": "^10.0.1",
+    "framer-motion": "^10.12.12",
     "next": "13.3.1",
     "next-auth": "^4.19.0",
     "next-axiom": "^0.17.0",
