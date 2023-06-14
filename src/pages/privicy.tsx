@@ -2,7 +2,7 @@ import React from "react";
 
 const PrivacyPolicy: React.FC = () => {
   return (
-    <>
+    <article className="lg:prose-xl prose">
       <h1>Privacy Policy</h1>
 
       <p>
@@ -147,7 +147,7 @@ const PrivacyPolicy: React.FC = () => {
         <br />
         <a href="https://frittendendogagility.com">frittendendogagility.com</a>
       </address>
-    </>
+    </article>
   );
 };
 
