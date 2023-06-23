@@ -89,7 +89,7 @@ const Dashboard: NextPage<DashboardProps> = ({
         <title>FDA League</title>
         <meta name="description" content="The dog agility league " />
       </Head>
-      <div className="grid md:grid-rows-1 grid-cols-1 md:grid-cols-3 gap-2 py-4">
+      <div className="grid md:grid-rows-1 grid-cols-1 md:grid-cols-3 gap-2 py-3">
         <Menu />
         <LeagueTable activeLeagues={activeLeagues} table={leagueTable} />
       </div>
