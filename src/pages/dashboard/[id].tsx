@@ -169,7 +169,7 @@ const LeagueTable: React.FC<LeagueTableProps> = ({ table, activeLeagues }) => {
         </thead>
         <tbody className="overflow-y-scroll">
           {table.map((row, index) => (
-            <tr key={row.dog.name}>
+            <tr key={row.dog.name + row.user.name + row.points.toString()}>
               <td className="border px-4 py-2">{index + 1}</td>
               <td className="border px-4 py-2">{row.dog.name}</td>
               <td className="border px-4 py-2">{row.user.name}</td>
