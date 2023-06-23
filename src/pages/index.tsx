@@ -33,7 +33,7 @@ const Home: NextPage = () => {
           {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
           <div className="place-self-center">
             {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-            <Image src={FDALogo} alt="FDA Logo" width={500} height={500} />
+            <Image src={FDALogo} alt="FDA Logo" width={500} height={500} priority />
           </div>
           <h1 className="text-center text-4xl font-extrabold tracking-tight text-black">
             The FDA League
