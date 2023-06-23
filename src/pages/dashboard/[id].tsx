@@ -13,9 +13,9 @@ import signOutIcon from "../../../Images/signOut.svg";
 import pawPrint from "../../../Images/pawPrint.svg";
 import menuIcon from "../../../Images/menu.svg";
 // import rosette from "../../../Images/rosette.svg";
-import { api } from "../../utils/api";
 import { prisma } from "../../server/db";
 import { updateLeagueTable } from "../api/updateLeagues";
+import logo from "../../../Images/FDALogo.svg";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const leagues = await prisma.league.findMany({
@@ -89,42 +89,15 @@ const Dashboard: NextPage<DashboardProps> = ({
         <title>FDA League</title>
         <meta name="description" content="The dog agility league " />
       </Head>
-      <div className="grid h-screen w-full grid-rows-4 items-center bg-gradient-to-t from-emerald-400 to-teal-200 md:grid-cols-4 md:grid-rows-1">
-        <News />
+      <div className="grid md:grid-rows-1 grid-cols-1 md:grid-cols-3 gap-2 py-3">
         <Menu />
-        <LeagueTable table={leagueTable} activeLeagues={activeLeagues} />
+        <LeagueTable activeLeagues={activeLeagues} table={leagueTable} />
       </div>
     </>
   );
 };
 
 export default Dashboard;
-
-const News: React.FC = () => {
-  const newsQuery = api.news.getNews.useQuery();
-  const { data: news } = newsQuery;
-
-  if (newsQuery.isLoading) {
-    return <div>Loading...</div>;
-  }
-  return (
-    <div className="card text-slate-600">
-      <h2 className="text-center text-xl font-extrabold tracking-tight ">
-        The News
-      </h2>
-      {news?.map((newsItem) => (
-        <div className="rounded-lg" key={newsItem.title}>
-          <h3 className=" text-lg font-bold">{newsItem.title}</h3>
-          <p className="text-sm">{newsItem.content}</p>
-          {/* add the date in the right corner small */}
-          <p className="relative bottom-0 right-3 text-right text-xs">
-            {newsItem.createdAt.toDateString()}
-          </p>
-        </div>
-      ))}
-    </div>
-  );
-};
 
 type LeagueTableProps = {
   table: LeagueTable[];
@@ -143,22 +116,18 @@ const LeagueTable: React.FC<LeagueTableProps> = ({ table, activeLeagues }) => {
     (league) => league.id !== id
   );
   return (
-    <div className="card row-span-2 md:col-span-2">
-      <div className="card-header flex flex-row">
+    <div className="px-3 row-span-2 md:col-span-2">
+      <h3 className="w-full text-center bg-base-300 p-2 font-extrabold text-2xl tracking-tight text-base-content rounded-t-lg">
+        {currentLeagueName}
+      </h3>
+      <div className="flex flex-row w-full bg-base-200 justify-evenly">
         {filteredActiveLeagues.map((league) => (
           <Link href={`/dashboard/${league.id}`} key={league.id}>
-            <h3 className=" bg-base-300 p-2 font-bold tracking-tight text-base-content">
-              {league.name}
-            </h3>
+            <h3 className=" p-2 font-bold text-base-content">{league.name}</h3>
           </Link>
         ))}
       </div>
-      <div className="card-header flex flex-row items-center justify-center">
-        <h3 className="w-full bg-base-200 p-2 text-center font-bold tracking-tight text-base-content">
-          {currentLeagueName}
-        </h3>
-      </div>
-      <table className="table rounded-t-none">
+      <table className="table-compact rounded-t-none w-full">
         <thead>
           <tr>
             <th className="rounded-t-none border px-4 py-2">Position</th>
@@ -170,7 +139,7 @@ const LeagueTable: React.FC<LeagueTableProps> = ({ table, activeLeagues }) => {
         <tbody className="overflow-y-scroll">
           {table.map((row, index) => (
             <tr key={row.dog.name + row.user.name + row.points.toString()}>
-              <td className="border px-4 py-2">{index + 1}</td>
+              <td className="border px-4 py-2 text-center">{index + 1}</td>
               <td className="border px-4 py-2">{row.dog.name}</td>
               <td className="border px-4 py-2">{row.user.name}</td>
               <td className="border px-4 py-2">{row.points}</td>
@@ -184,16 +153,23 @@ const LeagueTable: React.FC<LeagueTableProps> = ({ table, activeLeagues }) => {
 
 const Menu = () => {
   return (
-    <div className="card m-3 grid grid-cols-2 p-2 md:grid-cols-1">
-      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-      <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
-      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-      <MenuItem link={"/manageDogs"} icon={pawPrint} text="Manage Dogs" />
-      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-      <MenuItem link={"/eventLog"} icon={menuIcon} text="Event Log" />
-      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-      {/* <MenuItem link={"/rewards"} icon={rosette} text="Rewards" /> */}
-      <SignOutComponent />
+    <div className="bg-green-300 rounded-lg mx-3 p-3">
+      <div className="flex justify-center">
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        <Image src={logo} alt="FDA Logo" width={200} height={200} />
+      </div>
+      <br />
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-1">
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        <MenuItem link={"/addEvent"} icon={add} text="Record An Event" />
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        <MenuItem link={"/manageDogs"} icon={pawPrint} text="Manage Dogs" />
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        <MenuItem link={"/eventLog"} icon={menuIcon} text="Event Log" />
+        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+        {/* <MenuItem link={"/rewards"} icon={rosette} text="Rewards" /> */}
+        <SignOutComponent />
+      </div>
     </div>
   );
 };
@@ -208,28 +184,24 @@ const MenuItem = ({
   text: string;
 }) => {
   return (
-    <div className="">
-      <Link href={link} className="flex flex-row items-center gap-5 font-bold">
-        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-        <Image src={icon} alt="text" width={50} height={50} />
-        <h3>{text}</h3>
-      </Link>
-    </div>
+    <Link href={link} className="flex flex-row items-center gap-5 font-bold">
+      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+      <Image src={icon} alt="text" width={50} height={50} />
+      <h3>{text}</h3>
+    </Link>
   );
 };
 
 const SignOutComponent = () => {
   return (
-    <div className="">
-      <button
-        onClick={() => void signOut()}
-        className="flex flex-row items-center gap-5 font-bold"
-      >
-        {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
-        <Image src={signOutIcon} alt="text" width={50} height={50} />
-        <h3>Logout</h3>
-      </button>
-    </div>
+    <button
+      onClick={() => void signOut()}
+      className="flex flex-row items-center gap-5 font-bold"
+    >
+      {/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+      <Image src={signOutIcon} alt="text" width={50} height={50} />
+      <h3>Logout</h3>
+    </button>
   );
 };
 
