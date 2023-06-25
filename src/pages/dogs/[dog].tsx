@@ -117,7 +117,7 @@ const EditPage: React.FC = () => {
               className="selectClass"
               id="leagueId"
               name="leagueId"
-              defaultValue={dog.leagueId}
+              defaultValue={dog?.leagueId}
             >
               {leagues.data?.map((league) => (
                 <option key={league.id} value={league.id}>
