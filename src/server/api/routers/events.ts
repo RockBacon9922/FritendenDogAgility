@@ -105,4 +105,19 @@ export const events = createTRPCRouter({
       await prisma.$disconnect();
       return events;
     }),
+  getEventsById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input }) => {
+      const event = await prisma.event.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+      await prisma.$disconnect();
+      return event;
+    }),
 });

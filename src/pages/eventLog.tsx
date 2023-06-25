@@ -52,6 +52,7 @@ const EventTable: React.FC<EventTableProps> = ({ userId }) => {
         <table className="table w-full">
           <thead>
             <tr>
+              <th>Edit Event</th>
               <th>EventName</th>
               <th>EventType</th>
               <th>EventDate</th>
@@ -74,6 +75,11 @@ const EventTable: React.FC<EventTableProps> = ({ userId }) => {
             {status === "success" &&
               events?.map((event) => (
                 <tr key={event.id}>
+                  <td>
+                    <Link href={`/event/${event.id}/?e="edit"`}>
+                      <p className="btn-primary btn">Edit</p>
+                    </Link>
+                  </td>
                   <td>{event.eventName}</td>
                   <td>{event.eventType}</td>
                   <td>{event.dateOfEvent.toDateString()}</td>
