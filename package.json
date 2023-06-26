@@ -40,7 +40,7 @@
     "autoprefixer": "^10.4.14",
     "devcrypt": "^1.0.6",
     "eslint": "^8.43.0",
-    "eslint-config-next": "13.4.5",
+    "eslint-config-next": "13.4.7",
     "postcss": "^8.4.24",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",
