@@ -14,7 +14,7 @@
     "@prisma/client": "^4.16.1",
     "@sentry/nextjs": "^7.56.0",
     "@sentry/profiling-node": "^0.3.0",
-    "@tanstack/react-query": "^4.29.15",
+    "@tanstack/react-query": "^4.29.19",
     "@trpc/client": "^10.32.0",
     "@trpc/next": "^10.32.0",
     "@trpc/react-query": "^10.32.0",
